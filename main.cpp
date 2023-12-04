@@ -14,18 +14,19 @@ int keyStatus[256];
 float pe = 0.0;
 float gX = 0;
 float gY = 0;
-float thetaArma = 0;
+float gThetaArma = 0;
 float gTempoDesdeUltimoSpawn = 0;
-
-void tratamentoTiro();
 
 struct Tiro
 {
     float x;
     float y;
+    float vx;
+    float vy;
+
     bool visivel;
 };
-Tiro gTiros[100];
+Tiro gTiros[1000];
 
 struct Barril
 {
@@ -70,7 +71,7 @@ Config carregarConfiguracoes()
     c.jogadorVelocidade = jogador->IntAttribute("velocidade");
     c.inimigoRaioCabeca = inimigo->IntAttribute("raioCabeca");
     c.inimigoTirosPorSegundo = inimigo->IntAttribute("tirosPorSegungo");
-    c.inimigoVelocidadeTiro = inimigo->IntAttribute("velocidade");
+    c.inimigoVelocidadeTiro = inimigo->IntAttribute("velocidadeTiro");
     c.barrilAltura = barril->IntAttribute("altura");
     c.barrilLargura = barril->IntAttribute("largura");
     c.barrilnParaGanhar = barril->IntAttribute("nParaGanhar");
@@ -104,29 +105,34 @@ void mouse(int button, int state, int x, int y)
 {
     if (state == 0)
     {
-        tratamentoTiro();
+        // adiciona tiro
+        for (int i = 0; i < 100; i++)
+        {
+            if (gTiros[i].visivel)
+                continue;
+
+            gTiros[i].visivel = true;
+            // o tiro parte da arma do jogador
+            gTiros[i].x = gX + (1.25 * c.jogadorRaioCabeca) * cos((gThetaArma) * M_PI / 180) ;
+            gTiros[i].y = gY + (1.25 * c.jogadorRaioCabeca) * sin((gThetaArma) * M_PI / 180) ;
+
+            // o tiro tem velocidade em x e y, mas o módulo da velocidade é constante.
+            gTiros[i].vx = cos((gThetaArma + 90) * M_PI / 180) * c.inimigoVelocidadeTiro;
+            gTiros[i].vy = sin((gThetaArma + 90) * M_PI / 180) * c.inimigoVelocidadeTiro;
+
+            break;
+        }
     }
 }
 
-void movemouse(int x, int y)
+void passivemove(int x, int y)
 {
-    /*   y = c.arenaAltura -y;
-       if (x<=0)
-           x=1;
-       if (x>=c.arenaLargura)
-           x = c.arenaLargura; */
-    if (x >= 0 && x <= c.arenaLargura)
-    {
-        if (x <= 0)
-            x = 1;
-        if (x <= c.arenaLargura / 2)
-            thetaArma += (c.arenaLargura / x);
-        else
-            thetaArma -= (c.arenaLargura / x);
-    }
+    float dx = x - (gX + c.arenaLargura / 2);
+    float dy = (c.arenaAltura - gY) - y;
 
-    printf("x = %d\n", x);
-    printf("y = %d\n\n", y);
+    gThetaArma = atan2(dy, dx);
+    // atan2 retorna em radianos, converte para graus:
+    gThetaArma = gThetaArma * 180 / M_PI - 90;
 }
 
 void init()
@@ -143,6 +149,8 @@ void init()
             100);    // Z coordinate of the “far” plane
     glMatrixMode(GL_MODELVIEW); // Select the projection matrix
     glLoadIdentity();
+
+    gY = c.jogadorRaioCabeca + 10;
 }
 
 void DesenharRect(float largura, float altura)
@@ -195,7 +203,7 @@ void DesenharInimigo(int value)
         glPushMatrix();
         {
             glColor3f(1, 0.5, 0);
-            DesenharRectCentrado(c.barrilAltura, c.barrilLargura);
+            DesenharRectCentrado(c.barrilLargura, c.barrilAltura);
         }
         glPopMatrix();
     }
@@ -207,7 +215,8 @@ void DesenharJogador()
 {
     glPushMatrix();
     {
-        glTranslated(gX, gY + c.jogadorRaioCabeca + 30, 0);
+        // origem: centro da cabeça do jogador 
+        glTranslated(gX, gY, 0);
         //proporcional a Cabeca do Jogador
         glScaled(c.jogadorRaioCabeca, c.jogadorRaioCabeca, 1);
 
@@ -231,7 +240,7 @@ void DesenharJogador()
         //Desenhar Arma
         glPushMatrix();
         {
-            glRotated(thetaArma, 0, 0, 1);
+            glRotated(gThetaArma, 0, 0, 1);
             glColor3f(0.6, 0.1, 0);
             glTranslated(1, -0.8, 0);
             DesenharRect(0.5, 3);
@@ -246,22 +255,16 @@ void DesenharJogador()
     glPopMatrix();
 }
 
-void DesenharBala()
+void DesenharBala(Tiro *bala)
 {
-
-    //Transformação para o mundo da Arma
     glPushMatrix();
     {
         glColor3b(0, 0, 0);
-        glTranslated(gX, gY + c.jogadorRaioCabeca + 30, 0);
+        glTranslated(bala->x, bala->y, 1);
         glScaled(c.jogadorRaioCabeca, c.jogadorRaioCabeca, 1);
-        glRotated(thetaArma, 0, 0, 1);
-        glTranslated(1, -0.8, 0);
-        glTranslated(0.25, 3, 0);
-
-
-        // Bala
-        DesenharCirculo(0.2);
+       
+        // Bala - 10% da cabeça do jogador
+        DesenharCirculo(0.10f);
     }
     glPopMatrix();
 
@@ -279,20 +282,7 @@ void Desenha()
     {
         if (gTiros[i].visivel)
         {
-            DesenharBala();
-        }
-    }
-}
-
-void tratamentoTiro()
-{
-    for (int i = 0; i < 100; i++)
-    {
-        if (gTiros[i].visivel == false)
-        {
-            gTiros[i].visivel = true;
-//           gTiros[i].x = posicaodoJogador
-//           gTiros[i].y = posicaodoJogador
+            DesenharBala(&gTiros[i]);
         }
     }
 }
@@ -307,15 +297,15 @@ void idle(void)
 
     if (keyStatus[(int) ('w')])
     {
-        if (gY > (c.arenaAltura / 2) - 2 * c.jogadorRaioCabeca)
+        if (gY > (c.arenaAltura / 2) - c.jogadorRaioCabeca)
         {
-            gY = (c.arenaAltura / 2) - 2 * c.jogadorRaioCabeca;
+            gY = (c.arenaAltura / 2) - c.jogadorRaioCabeca;
             pe += 0.09;
         }
         else
         {
-            gY += 1;
-            pe += 0.09;
+            gY += 1*c.jogadorVelocidade;
+            pe += 0.09*c.jogadorVelocidade;
         }
     }
 
@@ -325,8 +315,8 @@ void idle(void)
             gY = -2;
         else
         {
-            gY -= 1;
-            pe += 0.09;
+            gY -= 1 * c.jogadorVelocidade;
+            pe += 0.09 * c.jogadorVelocidade;
         }
     }
 
@@ -339,8 +329,8 @@ void idle(void)
         }
         else
         {
-            gX += 1;
-            pe += 0.09;
+            gX += 1 * c.jogadorVelocidade;
+            pe += 0.09 * c.jogadorVelocidade;
         }
     }
 
@@ -353,12 +343,11 @@ void idle(void)
         }
         else
         {
-            gX -= 1;
-            pe += 0.09;
+            gX -= 1 *c.jogadorVelocidade;
+            pe += 0.09 * c.jogadorVelocidade;
         }
     }
 
-    //tratamento de barris --------------------------------incompleto--------------------------------
     // movimenta barris beasedo no tempo dt
     for (int i = 0; i < 10; i++)
     {
@@ -395,26 +384,53 @@ void idle(void)
             if (barril->vida > 0)
                 continue;
 
-            barril->vida = 300;
+            barril->vida = 2 + rand() % 7;
             // 20% de chance de spawnar um barril com inimigo
             barril->temInimigo = r < 0.2f * chance;
-            barril->x = rand() % c.arenaLargura;
-            if (barril->x < 0)
-                barril->x = -barril->x;
-            barril->x -= c.arenaLargura / 2;
+            barril->x = (rand() % (c.arenaLargura-c.barrilLargura))-(c.arenaLargura/2 - c.barrilLargura/2);
             barril->y = c.arenaAltura - c.barrilAltura / 2;
 
             break;
         }
     }
 
-    // Tratamento Tiro 
     for (int i = 0; i < 100; i++)
     {
-//        tiro[i].y += velocidadeDeTiro * dt
-//        if tiro esta forada tela
-//            tiro.visivel = false
-    }
+        if (!gTiros[i].visivel)
+            continue;
+
+        gTiros[i].x += gTiros[i].vx * dt;
+        gTiros[i].y += gTiros[i].vy * dt;
+
+        if (gTiros[i].y > c.arenaAltura || gTiros[i].y < 0 || gTiros[i].x > c.arenaLargura / 2 ||
+            gTiros[i].x < -c.arenaLargura / 2)
+        {
+            gTiros[i].visivel = false;
+        }
+
+        // colisão com barril
+        for (int j = 0; j < 10; j++)
+        {
+            Barril *barril = &gBarris[j];
+            if (barril->vida <= 0)
+                continue;
+
+            float dx = gTiros[i].x - barril->x;
+            float dy = gTiros[i].y - barril->y;
+
+            if (dx > -c.barrilLargura/2 && dx < c.barrilLargura/2){
+                if (dy > -c.barrilAltura/2 && dy < c.barrilAltura/2)
+                    {
+                        gTiros[i].visivel = false;
+                        barril->vida -= 1;
+                        if (barril->vida <= 0)
+                        {
+                            barril->temInimigo = false;
+                        }
+                    }
+                }
+            }
+        }
 
     glutPostRedisplay();
 
@@ -466,7 +482,7 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyUp);
     glutMouseFunc(mouse);
-    glutMotionFunc(movemouse);
+    glutPassiveMotionFunc(passivemove);
     glutIdleFunc(idle);
     init();
     glutSwapBuffers();
