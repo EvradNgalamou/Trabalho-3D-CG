@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdio.h>
 #include "tinyxml2.h"
+#include "vector3f.h"
+#include "objloader.h"
 #include <ctime>
 
 using namespace tinyxml2;
@@ -56,41 +58,36 @@ Config carregarConfiguracoes()
     return c;
 }
 
-struct vetor3f{
-    float x;
-    float y;
-    float z;
-};
+mesh gBarril;
 
-
-class Barril {
+struct Barril
+{
+public:
     int vida;
     bool temInimigo = false;
-    vetor3f posicao;
-    vetor3f velocidade;
+    Vector3f posicao;
+    Vector3f velocidade;
     float angulo;
     float velocidadeAngular;
     float raioColisao;
-    vetor3f miraInimigo;
+    Vector3f miraInimigo;
 
-    void Descer( float dt){
+    void Descer(float dt)
+    {
         // Transladar na Superficia da Arena
-        posicao.x += velocidade.x * dt;
-        posicao.y += velocidade.y * dt;
-        posicao.z += velocidade.z * dt;
-        // Rotacionar 
-        angulo += velocidadeAngular *dt;
+        posicao += velocidade * dt;
+        // Rotacionar
+        angulo += velocidadeAngular * dt;
     }
 
-    void atirar (float dt){
-
+    void atirar(float dt)
+    {
     }
-
-
 };
 
-class jogador {
-    vetor3f posicao;
+class jogador
+{
+    Vector3f posicao;
     float raioColisao;
     bool morreu;
     bool ganhou;
@@ -98,23 +95,21 @@ class jogador {
     int movX;
     int movY;
 
-    void mover(float dt){
-        if (movX == 0 && movY == 0){
-            return ;
+    void mover(float dt)
+    {
+        if (movX == 0 && movY == 0)
+        {
+            return;
         }
     }
-
-
-
 };
 
-
-class game{
+class game
+{
     int tipoCamera = 1;
-
-
-
 };
+
+game *g;
 
 void keyPress(unsigned char key, int x, int y)
 {
@@ -136,13 +131,19 @@ void ResetKeyStatus()
         keyStatus[i] = 0;
 }
 
-void mouse(int button, int state, int x, int y){}
+void mouse(int button, int state, int x, int y) {}
 
-void passivemove(int x, int y){}
+void passivemove(int x, int y) {}
 
 void init()
 {
     ResetKeyStatus();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(50, 1, 1, 15);
+
+    gBarril.loadMesh("models/arena.obj");
+    gBarril.loadTexture("models/textures.bmp");
 }
 
 float gTempoDesdeUltimoIdle = 0;
@@ -157,16 +158,17 @@ void idle(void)
     gTempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME);
 }
 
-void display(game* g)
+void display()
 {
     /* Limpar todos os pixels  */
     glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-     
+    gluLookAt(5, 10, 5, 0, 0, 0, 0, 0, 1);
 
-
+    gBarril.draw();
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer
@@ -180,8 +182,7 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     // Create the window.
     glutInitWindowSize(c.arenaLargura, c.arenaAltura);
     glutInitWindowPosition(1, 1);
