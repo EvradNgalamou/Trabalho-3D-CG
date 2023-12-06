@@ -86,6 +86,47 @@ public:
     }
 };
 
+
+
+void DesenhaJogador()
+    {
+        // Desenhar Jogador
+        glPushMatrix();
+
+        // Corpo Do Jogador
+        glPushMatrix();
+        glColor3f(0, 1, 0); // Verde
+        glTranslatef(0, 0, 6);
+        glScalef(2, 1, 4);
+        glutSolidCube(1);
+        glPopMatrix();
+        glVertex3f(1, 0, 0);
+
+        // Perna Esquerda
+        glPushMatrix();
+        glTranslatef(-1, 0, 2);
+        glScalef(1, 1, 4);
+        glutSolidCube(1);
+        glPopMatrix();
+
+        // Perna direita
+        glPushMatrix();
+        glTranslatef(1, 0, 2);
+        glScalef(1, 1, 4);
+        glutSolidCube(1);
+        glPopMatrix();
+
+        // Desenho Arma
+        glPushMatrix();
+        glTranslatef(2, 0, 6);
+        glScalef(0.5, 4, 0.5);
+        glutSolidCube(1);
+        glPopMatrix();
+
+        glPopMatrix();
+    }
+
+
 class jogador
 {
     Vector3f posicao;
@@ -103,6 +144,8 @@ class jogador
             return;
         }
     }
+
+    
 };
 
 class game
@@ -134,14 +177,45 @@ void ResetKeyStatus()
 
 void mouse(int button, int state, int x, int y) {}
 
-void passivemove(int x, int y) {}
+
+float prev_alpha = 0;
+float prev_beta = 0;
+
+int prev_x = 0;
+int prev_y = 0;
+
+float radius = 15;
+float radian60 = 60 * M_PI / 180.0;
+
+void passivemove(int x, int y) {
+    int dx = x - prev_x;
+    int dy = y - prev_y;
+
+    float da = 0.007 * dx;
+    float db = 0.02 * dy;
+
+    float alpha = prev_alpha + da;
+    float beta = prev_beta + db;
+
+    if (beta < -radian60) {
+        beta = -radian60;
+    } else if (beta > radian60) {
+        beta = radian60;
+    }
+
+    prev_alpha = alpha;
+    prev_beta = beta;
+
+    prev_x = x;
+    prev_y = y;
+}
 
 void init()
 {
     ResetKeyStatus();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(50, 1, 1, 15);
+    gluPerspective(50, 1, 1, 50);
 
     gBarril.loadMesh("models/arena.obj");
     gBarril.loadTexture("models/textures.bmp");
@@ -162,14 +236,49 @@ void idle(void)
 void display()
 {
     /* Limpar todos os pixels  */
-    glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
+    //  glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(5, 10, 5, 0, 0, 0, 0, 0, 1);
 
-    gBarril.draw();
+    gluLookAt(
+        radius * cos(-prev_alpha) * cos(prev_beta),
+        radius * sin(-prev_alpha) * cos(prev_beta),
+        6+radius * sin(prev_beta),
+        0, 0, 6,
+        0, 0, 1
+    );
+
+    glPushMatrix();
+    // Desenhar arena
+    glColor3f(0, 0, 1); // Azul.
+    glRotatef(5, 1, 0, 0);
+    glTranslatef(0, 0, -0.05);
+    glScaled(10, 10, 0.1);
+    glutWireCube(1);
+    glPopMatrix();
+
+    DesenhaJogador();
+   
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glScaled(4, 4, 4);
+    glColor3f(1, 0, 0);
+    glBegin(GL_LINES);
+    glVertex3d(0, 0, 0);
+    glVertex3f(1, 0, 0);
+    glEnd();
+    glColor3f(0, 1, 0);
+    glBegin(GL_LINES);
+    glVertex3d(0, 0, 0);
+    glVertex3f(0, 1, 0);
+    glEnd();
+    glColor3f(0, 0, 1);
+    glBegin(GL_LINES);
+    glVertex3d(0, 0, 0);
+    glVertex3f(0, 0, 1);
+    glEnd();
 
     /* EIXOS = X-RED Y-GREEN Z-BLUE  */
     DrawAxes(3);
