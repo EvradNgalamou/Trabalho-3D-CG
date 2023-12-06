@@ -2,7 +2,10 @@ all: Compile Execute Clear_File
 
 Compile:
 	clear
-	g++ -o trabalhocg main.cpp tinyxml2.cpp -lGL -lGLU -lglut
+#	OLD LINE
+#	g++ -o trabalhocg main.cpp tinyxml2.cpp -lGL -lGLU -lglut 
+
+	g++ -o trabalhocg main.cpp tinyxml2.cpp imageloader.cpp matrix4f.cpp objloader.cpp -lGL -lGLU -lglut
 	clear
 
 Execute:
