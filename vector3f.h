@@ -5,6 +5,8 @@
 #ifndef README_MD_VECTOR2F_HPP
 #define README_MD_VECTOR2F_HPP
 
+#include "igl.h"
+
 struct Vector3f {
     float x, y, z;
 
@@ -48,6 +50,8 @@ struct Vector3f {
     float length() const;
 
     float dot(const Vector3f &other) const;
+
+    Vector3f cross(const Vector3f &other) const;
 
     void normalize();
 
