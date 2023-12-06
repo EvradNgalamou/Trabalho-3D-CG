@@ -7,6 +7,7 @@
 #include "tinyxml2.h"
 #include "vector3f.h"
 #include "objloader.h"
+#include "volumes.h"
 #include <ctime>
 
 using namespace tinyxml2;
@@ -169,6 +170,9 @@ void display()
     gluLookAt(5, 10, 5, 0, 0, 0, 0, 0, 1);
 
     gBarril.draw();
+
+    /* EIXOS = X-RED Y-GREEN Z-BLUE  */
+    DrawAxes(3);
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer
