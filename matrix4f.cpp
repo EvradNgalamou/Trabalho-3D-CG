@@ -2,6 +2,7 @@
 // Created by gibbs2b on 18/06/23.
 //
 
+#include <cmath>
 #include "matrix4f.h"
 #include "vector3f.h"
 
@@ -110,21 +111,21 @@ matrix4f::ortho_rectangle(float sx1, float sy1, float sx2, float sy2, float tx1,
     return result;
 }
 
-float &matrix4f::operator[](int i) {
+float& matrix4f::operator[](int i) {
     return matrix[i];
 }
 
-const float &matrix4f::operator[](int i) const {
+const float& matrix4f::operator[](int i) const {
     return matrix[i];
 }
 
-void matrix4f::operator=(const matrix4f &other) {
+void matrix4f::operator=(const matrix4f&other) {
     for (int i = 0; i < 16; i++) {
         matrix[i] = other[i];
     }
 }
 
-matrix4f matrix4f::operator*(const matrix4f &other) {
+matrix4f matrix4f::operator*(const matrix4f&other) const {
     matrix4f result;
 
     for (int i = 0; i < 4; i++) {
@@ -141,12 +142,45 @@ matrix4f matrix4f::operator*(const matrix4f &other) {
     return result;
 }
 
-Vector3f matrix4f::operator*(const Vector3f &other) {
+Vector3f matrix4f::operator*(const Vector3f&other) const {
     Vector3f result;
 
     result.x = matrix[0] * other.x + matrix[4] * other.y + matrix[8] * other.z + matrix[12];
     result.y = matrix[1] * other.x + matrix[5] * other.y + matrix[9] * other.z + matrix[13];
     result.z = matrix[2] * other.x + matrix[6] * other.y + matrix[10] * other.z + matrix[14];
 
+    return result;
+}
+
+matrix4f matrix4f::rotateX(float angle) {
+    matrix4f result;
+    result[0] = 1.0f;
+    result[5] = cosf(angle);
+    result[6] = sinf(angle);
+    result[9] = -sinf(angle);
+    result[10] = cosf(angle);
+    result[15] = 1.0f;
+    return result;
+}
+
+matrix4f matrix4f::rotateY(float angle) {
+    matrix4f result;
+    result[0] = cosf(angle);
+    result[2] = -sinf(angle);
+    result[5] = 1.0f;
+    result[8] = sinf(angle);
+    result[10] = cosf(angle);
+    result[15] = 1.0f;
+    return result;
+}
+
+matrix4f matrix4f::rotateZ(float angle) {
+    matrix4f result;
+    result[0] = cosf(angle);
+    result[1] = sinf(angle);
+    result[4] = -sinf(angle);
+    result[5] = cosf(angle);
+    result[10] = 1.0f;
+    result[15] = 1.0f;
     return result;
 }

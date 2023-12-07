@@ -6,7 +6,6 @@
 #define README_MD_MATRIX4F_H
 
 
-// #include "vector2f.hpp"
 #include "vector3f.h"
 
 struct matrix4f {
@@ -40,24 +39,30 @@ struct matrix4f {
     static matrix4f ortho(float left, float right, float bottom, float top, float near, float far);
 
     static matrix4f ortho_rectangle(
-            float sx1, float sy1, float sx2, float sy2,
-            float tx1, float ty1, float tx2, float ty2
+        float sx1, float sy1, float sx2, float sy2,
+        float tx1, float ty1, float tx2, float ty2
     );
 
     // [i]
-    float &operator[](int i);
+    float& operator[](int i);
 
     // [i]
-    const float &operator[](int i) const;
+    const float& operator[](int i) const;
 
     // m[i]=v
-    void operator=(const matrix4f &other);
+    void operator=(const matrix4f&other);
 
     // matrix multiplication
-    matrix4f operator*(const matrix4f &other);
+    matrix4f operator*(const matrix4f&other) const;
 
     // vector multiplication
-    Vector3f operator*(const Vector3f &other);
+    Vector3f operator*(const Vector3f&other) const;
+
+    static matrix4f rotateX(float angle);
+
+    static matrix4f rotateY(float angle);
+
+    static matrix4f rotateZ(float angle);
 };
 
 
