@@ -17,14 +17,6 @@
 // Key status
 int keyStatus[256];
 
-/* Identificadores de textura */
-GLuint textureGround;//.................. Piso do cenario
-
-/* Define parametro padrao para os objetos */
-GLfloat stdSize   = 1.0; 
-GLfloat arenaComp = 10*stdSize; //................ Define o comprimento da arena 
-GLfloat arenaLarg = 4*stdSize; //................ Define a largura da arena 
-
 //Camera controls
 Config c;
 
@@ -135,9 +127,7 @@ void init()
     gBarril.loadMesh("models/arena.obj");
     gBarril.loadTexture("models/textures.bmp");
 
-    textureGround = LoadTextureRAW( "models/textures.bmp" );
-
-    g = new Game();
+    g = new Game(&c);
 }
 
 float gTempoDesdeUltimoIdle = 0;
@@ -184,7 +174,7 @@ void display(){
 
     /* EIXOS = X-RED Y-GREEN Z-BLUE  */
     DrawAxes(3);
-    DisplayPlane (textureGround, arenaLarg, arenaComp, 0);
+    g->arena->draw();
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer

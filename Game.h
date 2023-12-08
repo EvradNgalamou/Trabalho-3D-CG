@@ -2,6 +2,7 @@
 #define TRABALHO_3D_CG_GAME_H
 
 #include "Jogador.h"
+#include "Arena.h"
 
 /*
 class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentro de uma classe
@@ -199,10 +200,10 @@ class Game {
 
 public:
     Jogador* jogador;
+    Arena* arena;
+    Config* config;
 
-    Game() {
-        jogador = new Jogador();
-    }
+    Game(Config* config);
 };
 
 #endif //TRABALHO_3D_CG_GAME_H
