@@ -1,16 +1,17 @@
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-#include "tinyxml2.h"
-#include "vector3f.h"
-#include "objloader.h"
-#include "volumes.h"
-#include <ctime>
 
-using namespace tinyxml2;
+#include "objloader.h"
+
+#include "volumes.h"
+
+#include "Config.h"
+#include "Game.h"
 
 // Key status
 int keyStatus[256];
@@ -33,77 +34,11 @@ int lastX = 0;
 int lastY = 0;
 int buttonDown=0;
 
-struct Config
-{
-    int arenaAltura;
-    int arenaLargura;
-    int jogadorRaioCabeca;
-    int jogadorVelocidade;
-    int inimigoRaioCabeca;
-    int inimigoTirosPorSegundo;
-    int inimigoVelocidadeTiro;
-    int barrilAltura;
-    int barrilLargura;
-    int barrilNumeroTiros;
-    int barrilnParaGanhar;
-    int barrilVelocidade;
-};
-
 Config c;
-
-Config carregarConfiguracoes()
-{
-    XMLDocument doc;
-    doc.LoadFile("configuracoes.xml");
-    XMLElement *arena = doc.FirstChildElement("jogo")->FirstChildElement("arena");
-    XMLElement *jogador = doc.FirstChildElement("jogo")->FirstChildElement("jogador");
-    XMLElement *inimigo = doc.FirstChildElement("jogo")->FirstChildElement("inimigo");
-    XMLElement *barril = doc.FirstChildElement("jogo")->FirstChildElement("barril");
-
-    Config c;
-    c.arenaAltura = arena->IntAttribute("altura");
-    c.arenaLargura = arena->IntAttribute("largura");
-    c.jogadorRaioCabeca = jogador->IntAttribute("raioCabeca");
-    c.jogadorVelocidade = jogador->IntAttribute("velocidade");
-    c.inimigoRaioCabeca = inimigo->IntAttribute("raioCabeca");
-    c.inimigoTirosPorSegundo = inimigo->IntAttribute("tirosPorSegungo");
-    c.inimigoVelocidadeTiro = inimigo->IntAttribute("velocidadeTiro");
-    c.barrilAltura = barril->IntAttribute("altura");
-    c.barrilLargura = barril->IntAttribute("largura");
-    c.barrilnParaGanhar = barril->IntAttribute("nParaGanhar");
-    c.barrilNumeroTiros = barril->IntAttribute("numeroTiros");
-    c.barrilVelocidade = barril->IntAttribute("velocidade");
-
-    return c;
-}
 
 mesh gBarril;
 
-struct Barril
-{
-public:
-    int vida;
-    bool temInimigo = false;
-    Vector3f posicao;
-    Vector3f velocidade;
-    float angulo;
-    float velocidadeAngular;
-    float raioColisao;
-    Vector3f miraInimigo;
-
-    void Descer(float dt)
-    {
-        // Transladar na Superficia da Arena
-        posicao += velocidade * dt;
-        // Rotacionar
-        angulo += velocidadeAngular * dt;
-    }
-
-    void atirar(float dt)
-    {
-    }
-};
-
+Game *g;
 void DesenhaJogador()
     {
         // Desenhar Jogador
@@ -142,33 +77,6 @@ void DesenhaJogador()
         glPopMatrix();
     }
 
-
-class jogador
-{
-    Vector3f posicao;
-    float raioColisao;
-    bool morreu;
-    bool ganhou;
-    int pontuacao;
-    int movX;
-    int movY;
-
-    void mover(float dt)
-    {
-        if (movX == 0 && movY == 0)
-        {
-            return;
-        }
-    }
-};
-
-class game
-{
-    int tipoCamera = 1;
-};
-
-game *g;
-
 /* TECLADO*/
 void keyPress(unsigned char key, int x, int y){
 /*
@@ -198,7 +106,6 @@ void ResetKeyStatus(){
 }
 
 /* MOUSE */
-void mouse(int button, int state, int x, int y) {}
 void mouse_callback(int button, int state, int x, int y){
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
@@ -258,6 +165,8 @@ void init()
 
     textureGround = LoadTextureRAW( "models/textures.bmp" );
     glEnable(GL_LIGHT0);
+
+    g = new Game();
 }
 
 float gTempoDesdeUltimoIdle = 0;
@@ -314,8 +223,7 @@ void display(){
 
 int main(int argc, char *argv[])
 {
-
-    c = carregarConfiguracoes();
+    Config::load(&c);
 
     srand(time(NULL));
 
