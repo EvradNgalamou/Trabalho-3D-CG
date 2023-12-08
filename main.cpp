@@ -15,6 +15,24 @@ using namespace tinyxml2;
 // Key status
 int keyStatus[256];
 
+/* Identificadores de textura */
+GLuint textureGround;//.................. Piso do cenario
+
+/* Define parametro padrao para os objetos */
+GLfloat stdSize   = 1.0; 
+GLfloat arenaComp = 10*stdSize; //................ Define o comprimento da arena 
+GLfloat arenaLarg = 4*stdSize; //................ Define a largura da arena 
+
+//Camera controls
+double camDist=50;
+double camXYAngle=0;
+double camXZAngle=0;
+int toggleCam = 0;
+int camAngle = 60;
+int lastX = 0;
+int lastY = 0;
+int buttonDown=0;
+
 struct Config
 {
     int arenaAltura;
@@ -86,47 +104,6 @@ public:
     }
 };
 
-
-
-void DesenhaJogador()
-    {
-        // Desenhar Jogador
-        glPushMatrix();
-
-        // Corpo Do Jogador
-        glPushMatrix();
-        glColor3f(0, 1, 0); // Verde
-        glTranslatef(0, 0, 6);
-        glScalef(2, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-        glVertex3f(1, 0, 0);
-
-        // Perna Esquerda
-        glPushMatrix();
-        glTranslatef(-1, 0, 2);
-        glScalef(1, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        // Perna direita
-        glPushMatrix();
-        glTranslatef(1, 0, 2);
-        glScalef(1, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        // Desenho Arma
-        glPushMatrix();
-        glTranslatef(2, 0, 6);
-        glScalef(0.5, 4, 0.5);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        glPopMatrix();
-    }
-
-
 class jogador
 {
     Vector3f posicao;
@@ -144,8 +121,6 @@ class jogador
             return;
         }
     }
-
-    
 };
 
 class game
@@ -155,76 +130,102 @@ class game
 
 game *g;
 
-void keyPress(unsigned char key, int x, int y)
-{
+/* TECLADO*/
+void keyPress(unsigned char key, int x, int y){
+/*
     keyStatus[(int)(key)] = 1;
     glutPostRedisplay();
-}
 
-void keyUp(unsigned char key, int x, int y)
-{
+*/
+    switch (key){
+        case '1': keyStatus[(int)('1')] = 1; break;
+        case '2': keyStatus[(int)('2')] = 1; break;
+        case 27 :
+             exit(0);
+    }
+    glutPostRedisplay();
+}
+void keyUp(unsigned char key, int x, int y){
+
     keyStatus[(int)(key)] = 0;
     glutPostRedisplay();
 }
+void ResetKeyStatus(){
 
-void ResetKeyStatus()
-{
     int i;
     // Initialize keyStatus
     for (i = 0; i < 256; i++)
         keyStatus[i] = 0;
 }
 
+/* MOUSE */
 void mouse(int button, int state, int x, int y) {}
+void mouse_callback(int button, int state, int x, int y){
 
-
-float prev_alpha = 0;
-float prev_beta = 0;
-
-int prev_x = 0;
-int prev_y = 0;
-
-float radius = 15;
-float radian60 = 60 * M_PI / 180.0;
-
-void passivemove(int x, int y) {
-    int dx = x - prev_x;
-    int dy = y - prev_y;
-
-    float da = 0.007 * dx;
-    float db = 0.02 * dy;
-
-    float alpha = prev_alpha + da;
-    float beta = prev_beta + db;
-
-    if (beta < -radian60) {
-        beta = -radian60;
-    } else if (beta > radian60) {
-        beta = radian60;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        lastX = x;
+        lastY = y;
+        buttonDown = 1;
+    } 
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+        buttonDown = 0;
     }
-
-    prev_alpha = alpha;
-    prev_beta = beta;
-
-    prev_x = x;
-    prev_y = y;
 }
+void mouse_motion(int x, int y){
+
+    if (!buttonDown)
+        return;
+    
+    camXYAngle += x - lastX;
+    camXZAngle += y - lastY;
+    
+    camXYAngle = (int)camXYAngle % 360;
+    camXZAngle = (int)camXZAngle % 360;
+    
+    lastX = x;
+    lastY = y;
+}
+void passivemove(int x, int y) {}
+
+void changeCamera(int angle, int w, int h){
+
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    gluPerspective (angle, (GLfloat)w / (GLfloat)h, 1, 150.0);
+    glMatrixMode (GL_MODELVIEW);
+}
+void reshape (int w, int h) {
+
+    glViewport (0, 0, (GLsizei)w, (GLsizei)h);
+    changeCamera(camAngle, w, h);
+}
+
 
 void init()
 {
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+    glShadeModel (GL_SMOOTH);
+    glDepthFunc(GL_LEQUAL);
+
     ResetKeyStatus();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(50, 1, 1, 50);
+    gluPerspective(50, 1, 1, 15);
 
     gBarril.loadMesh("models/arena.obj");
     gBarril.loadTexture("models/textures.bmp");
+
+    textureGround = LoadTextureRAW( "models/textures.bmp" );
+    glEnable(GL_LIGHT0);
 }
 
 float gTempoDesdeUltimoIdle = 0;
 
 void idle(void)
 {
+
     // tempo desde o ultimo idle em segundos
     float t = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
     float dt = 0.001f * (glutGet(GLUT_ELAPSED_TIME) - gTempoDesdeUltimoIdle);
@@ -233,55 +234,40 @@ void idle(void)
     gTempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME);
 }
 
-void display()
-{
+void display(){
+    
     /* Limpar todos os pixels  */
-    //  glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
+    glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(
-        radius * cos(-prev_alpha) * cos(prev_beta),
-        radius * sin(-prev_alpha) * cos(prev_beta),
-        6+radius * sin(prev_beta),
-        0, 0, 6,
-        0, 0, 1
-    );
+    if (keyStatus[(int)'1'] == 1){ 
+        glTranslatef(0,0,-camDist);
+        glRotatef(camXZAngle,1,0,0);
+        glRotatef(camXYAngle,0,1,0);
+    }
+    else
+        if (keyStatus[(int)'2'] == 1)
+            gluLookAt( 5,10,5,  0,0,0,  0,0,1);
+        else
+            gluLookAt( 5,10,5,  0,0,0,  0,0,1);
 
-    glPushMatrix();
-    // Desenhar arena
-    glColor3f(0, 0, 1); // Azul.
-    glRotatef(5, 1, 0, 0);
-    glTranslatef(0, 0, -0.05);
-    glScaled(10, 10, 0.1);
-    glutWireCube(1);
-    glPopMatrix();
+    
 
-    DesenhaJogador();
+
+
+
+
+
+    
    
-    glClear(GL_DEPTH_BUFFER_BIT);
-
-    glScaled(4, 4, 4);
-    glColor3f(1, 0, 0);
-    glBegin(GL_LINES);
-    glVertex3d(0, 0, 0);
-    glVertex3f(1, 0, 0);
-    glEnd();
-    glColor3f(0, 1, 0);
-    glBegin(GL_LINES);
-    glVertex3d(0, 0, 0);
-    glVertex3f(0, 1, 0);
-    glEnd();
-    glColor3f(0, 0, 1);
-    glBegin(GL_LINES);
-    glVertex3d(0, 0, 0);
-    glVertex3f(0, 0, 1);
-    glEnd();
+    gBarril.draw();
 
     /* EIXOS = X-RED Y-GREEN Z-BLUE  */
     DrawAxes(3);
+    DisplayPlane (textureGround, arenaLarg, arenaComp, 0);
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer
@@ -303,7 +289,10 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(keyPress);
     glutKeyboardUpFunc(keyUp);
-    glutMouseFunc(mouse);
+//    glutMouseFunc(mouse);
+    glutMouseFunc(mouse_callback);
+    glutMotionFunc(mouse_motion);
+    glutReshapeFunc (reshape);
     glutPassiveMotionFunc(passivemove);
     glutIdleFunc(idle);
     init();
@@ -312,3 +301,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
