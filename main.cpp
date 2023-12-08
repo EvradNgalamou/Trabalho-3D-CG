@@ -22,38 +22,16 @@ Config c;
 
 mesh gBarril;
 
-Camera camera;
 Game *g;
 
 /* TECLADO*/
 void keyPress(unsigned char key, int x, int y){
     keyStatus[(int)(key)] = 1;
 
+    if (g->onKeyPress(key, x, y))
+        return;
+
     switch (key){
-        case '1':
-            camera.tipoCamera = 1;
-            break;
-        case '2':
-            camera.tipoCamera = 2;
-            break;
-        case '3':
-            camera.tipoCamera = 3;
-            break;
-
-        // movimento do jogador
-        case 'a':
-            g->jogador->movX -= 1;
-            break;
-        case 'd':
-            g->jogador->movX += 1;
-            break;
-        case 'w':
-            g->jogador->movY += 1;
-            break;
-        case 's':
-            g->jogador->movY -= 1;
-            break;
-
         case 27 :
              exit(0);
     }
@@ -65,21 +43,8 @@ void keyUp(unsigned char key, int x, int y){
 
     keyStatus[(int)(key)] = 0;
 
-    switch (key) {
-        // movimento do jogador
-        case 'a':
-            g->jogador->movX += 1;
-            break;
-        case 'd':
-            g->jogador->movX -= 1;
-            break;
-        case 'w':
-            g->jogador->movY -= 1;
-            break;
-        case 's':
-            g->jogador->movY += 1;
-            break;
-    }
+    if (g->onKeyUp(key, x, y))
+        return;
 
     glutPostRedisplay();
 }
@@ -93,17 +58,17 @@ void ResetKeyStatus(){
 
 /* MOUSE */
 void mouse_callback(int button, int state, int x, int y){
-    camera.onMouseDown(button, state, x, y);
+    g->onMouseKey(button, state, x, y);
 }
 
 void mouse_motion(int x, int y){
-    camera.onMouseMove(x, y);
+    g->onMouseMove(x, y);
 }
 
 void passivemove(int x, int y) {}
 
 void reshape (int w, int h) {
-    camera.onReshape(w, h);
+    g->onReshape(w, h);
 }
 
 
@@ -124,56 +89,13 @@ void init()
     g = new Game(&c);
 }
 
-float gTempoDesdeUltimoIdle = 0;
-
 void idle(void)
 {
-    // tempo desde o ultimo idle em segundos
-    float t = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-    float dt = t - gTempoDesdeUltimoIdle;
-
-    g->jogador->mover(g->arena->getEixoDeCaida(), dt);
-
-    glutPostRedisplay();
-    gTempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+    g->idle();
 }
 
 void display(){
-    
-    /* Limpar todos os pixels  */
-    glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    camera.transform(g->jogador);
-
-
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
-    // TODO: Desenhar coisas afetadas por luz
-
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
-    glDisable(GL_TEXTURE_2D);
-
-
-
-    g->jogador->draw();
-
-    gBarril.draw();
-
-    /* EIXOS = X-RED Y-GREEN Z-BLUE  */
-    DrawAxes(3);
-    g->arena->draw();
-
-    drawSimpleAxis();
-
-    /* Desenhar no frame buffer! */
-    glutSwapBuffers(); // Funcao apropriada para janela double buffer
+    g->display();
 }
 
 int main(int argc, char *argv[])

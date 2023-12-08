@@ -7,7 +7,7 @@
 #include <cmath>
 #include <GL/glut.h>
 
-void Camera::onMouseDown(int button, int state, int x, int y) {
+void Camera::onMouseKey(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         lastX = x;
         lastY = y;
@@ -53,7 +53,7 @@ void Camera::onReshape(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void Camera::transform(Jogador* jogador) {
+void Camera::transform(Jogador* jogador) const {
     // TODO: Tem que decidir a convenção: y ou z que é cima? Eu recomendo z pois quando se plota o gráfico de uma função
     //  em 3D, o eixo z é o eixo vertical, (x, y) é o plano horizontal
 

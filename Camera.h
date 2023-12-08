@@ -26,14 +26,14 @@ class Camera {
 public:
     int tipoCamera = 3; // 1, 2, 3
 
-    void onMouseDown(int button, int state, int x, int y);
+    void onMouseKey(int button, int state, int x, int y);
 
     void onMouseMove(int x, int y);
 
     void onReshape(int w, int h);
 
     // faz as devidas transformações com GL dependendo do tipo de camera atual
-    void transform(Jogador* jogador);
+    void transform(Jogador* jogador) const;
 };
 
 
