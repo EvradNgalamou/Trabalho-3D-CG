@@ -9,7 +9,7 @@
 #include "Jogador.h"
 
 class Camera {
-    GLfloat camDist = 50;
+    GLfloat camDist = 15;
 
     // Angulos de rotação da camera
     GLfloat horizontalAngle = 0; // horizontal
