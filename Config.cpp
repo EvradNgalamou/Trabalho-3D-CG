@@ -19,16 +19,16 @@ void Config::load(Config* config) {
     XMLElement* inimigo = jogo->FirstChildElement("inimigo");
     XMLElement* barril = jogo->FirstChildElement("barril");
 
-    config->arenaAltura = arena->IntAttribute("altura");
-    config->arenaLargura = arena->IntAttribute("largura");
+    config->arenaAltura = arena->FloatAttribute("altura");
+    config->arenaLargura = arena->FloatAttribute("largura");
     config->jogadorRaioCabeca = jogador->FloatAttribute("raioCabeca");
-    config->jogadorVelocidade = jogador->IntAttribute("velocidade");
-    config->inimigoRaioCabeca = inimigo->IntAttribute("raioCabeca");
-    config->inimigoTirosPorSegundo = inimigo->IntAttribute("tirosPorSegungo");
-    config->inimigoVelocidadeTiro = inimigo->IntAttribute("velocidadeTiro");
-    config->barrilAltura = barril->IntAttribute("altura");
-    config->barrilLargura = barril->IntAttribute("largura");
-    config->barrilnParaGanhar = barril->IntAttribute("nParaGanhar");
-    config->barrilNumeroTiros = barril->IntAttribute("numeroTiros");
-    config->barrilVelocidade = barril->IntAttribute("velocidade");
+    config->jogadorVelocidade = jogador->FloatAttribute("velocidade");
+    config->inimigoRaioCabeca = inimigo->FloatAttribute("raioCabeca");
+    config->inimigoTirosPorSegundo = inimigo->FloatAttribute("tirosPorSegungo");
+    config->inimigoVelocidadeTiro = inimigo->FloatAttribute("velocidadeTiro");
+    config->barrilAltura = barril->FloatAttribute("altura");
+    config->barrilLargura = barril->FloatAttribute("largura");
+    config->barrilnParaGanhar = barril->FloatAttribute("nParaGanhar");
+    config->barrilNumeroTiros = barril->FloatAttribute("numeroTiros");
+    config->barrilVelocidade = barril->FloatAttribute("velocidade");
 }

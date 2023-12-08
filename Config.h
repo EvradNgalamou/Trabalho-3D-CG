@@ -3,18 +3,18 @@
 
 
 struct Config {
-    int arenaAltura;
-    int arenaLargura;
+    float arenaAltura;
+    float arenaLargura;
     float jogadorRaioCabeca;
-    int jogadorVelocidade;
-    int inimigoRaioCabeca;
-    int inimigoTirosPorSegundo;
-    int inimigoVelocidadeTiro;
-    int barrilAltura;
-    int barrilLargura;
-    int barrilNumeroTiros;
-    int barrilnParaGanhar;
-    int barrilVelocidade;
+    float jogadorVelocidade;
+    float inimigoRaioCabeca;
+    float inimigoTirosPorSegundo;
+    float inimigoVelocidadeTiro;
+    float barrilAltura;
+    float barrilLargura;
+    float barrilNumeroTiros;
+    float barrilnParaGanhar;
+    float barrilVelocidade;
 
     static void load(Config* config);
 };
