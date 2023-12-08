@@ -166,7 +166,6 @@ void DesenhaJogadorDeTeste()
 
     // Corpo Do Jogador
     glPushMatrix();
-    glColor3f(0, 1, 0); // Verde
     glTranslatef(0, 0, 6);
     glScalef(2, 1, 4);
     glutSolidCube(1);

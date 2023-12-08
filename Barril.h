@@ -2,6 +2,7 @@
 #define BARRIL_H
 
 #include "vector3f.h"
+#include "Jogador.h"
 #include "Config.h"
 
 /*
@@ -41,7 +42,7 @@ public:
 
     void atirar(float dt);
 
-    void draw() const;
+    void draw(Jogador* jogador) const;
 };
 
 

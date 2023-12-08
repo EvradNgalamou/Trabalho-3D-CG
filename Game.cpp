@@ -42,7 +42,7 @@ void Game::idle() {
                 config,
                 Vector3f(x, config->arenaAltura / 2, config->barrilLargura / 2),
                 Vector3f(0.0f, -config->barrilVelocidade, 0.0f),
-                dt * rand() < 0.1f // 10% de chance de ter inimigo
+                Utilidades::chance(0.1f, 1)
         );
 
         barris.push_back(barril);
@@ -75,7 +75,7 @@ void Game::display() const {
     arena->draw();
 
     for (std::vector<Barril*>::const_iterator it = barris.begin(); it != barris.end(); ++it) {
-        (*it)->draw();
+        (*it)->draw(jogador);
     }
 
     glDisable(GL_LIGHTING);

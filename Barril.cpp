@@ -4,6 +4,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+#include "volumes.h"
+
 void Barril::Descer(float dt) {
     // Transladar na Superficia da Arena
     posicao += velocidade * dt;
@@ -14,7 +16,7 @@ void Barril::Descer(float dt) {
 void Barril::atirar(float dt) {
 }
 
-void Barril::draw() const {
+void Barril::draw(Jogador* jogador) const {
     glPushMatrix();
     {
         glTranslatef(posicao.x, posicao.y, posicao.z);
@@ -22,14 +24,31 @@ void Barril::draw() const {
         glRotatef(angulo, 1, 0, 0);
 
         // TODO: Desenhar modelo do barril
-        glColor3f(0.5f, 0.5f, 0.5f);
+        glColor3f(0.647059f, 0.164706f, 0.164706f);
         glutSolidCube(1.0f);
-
-        // TODO: Desenhar modelo do jogador
-        if (temInimigo) {
-        }
     }
     glPopMatrix();
+
+    if (temInimigo) {
+        glPushMatrix();
+        {
+            // todos os inimiogos miram no jogador
+            float angulo = atan2(
+                    jogador->posicao.y - posicao.y,
+                    jogador->posicao.x - posicao.x
+            );
+
+            glTranslatef(posicao.x, posicao.y, posicao.z);
+            glTranslatef(0.0f, 0.0f, config->barrilLargura / 2.0f);
+            glScalef(config->inimigoRaioCabeca, config->inimigoRaioCabeca, config->inimigoRaioCabeca);
+            glRotatef(angulo * 180 / M_PI, 0, 0, 1);
+            // ajuste que depende do modelo. O teste olha para o y
+            glRotatef(90 + 180, 0, 0, 1);
+            glColor3f(1, 0, 0);
+            DesenhaJogadorDeTeste();
+        }
+        glPopMatrix();
+    }
 }
 
 Barril::Barril(Config* config, Vector3f posicao, Vector3f velocidade, bool temInimigo) {
