@@ -21,7 +21,7 @@ void Config::load(Config* config) {
 
     config->arenaAltura = arena->IntAttribute("altura");
     config->arenaLargura = arena->IntAttribute("largura");
-    config->jogadorRaioCabeca = jogador->IntAttribute("raioCabeca");
+    config->jogadorRaioCabeca = jogador->FloatAttribute("raioCabeca");
     config->jogadorVelocidade = jogador->IntAttribute("velocidade");
     config->inimigoRaioCabeca = inimigo->IntAttribute("raioCabeca");
     config->inimigoTirosPorSegundo = inimigo->IntAttribute("tirosPorSegungo");

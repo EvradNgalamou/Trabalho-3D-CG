@@ -24,43 +24,6 @@ mesh gBarril;
 
 Camera camera;
 Game *g;
-void DesenhaJogador()
-    {
-        // Desenhar Jogador
-        glPushMatrix();
-
-        // Corpo Do Jogador
-        glPushMatrix();
-        glColor3f(0, 1, 0); // Verde
-        glTranslatef(0, 0, 6);
-        glScalef(2, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-        glVertex3f(1, 0, 0);
-
-        // Perna Esquerda
-        glPushMatrix();
-        glTranslatef(-1, 0, 2);
-        glScalef(1, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        // Perna direita
-        glPushMatrix();
-        glTranslatef(1, 0, 2);
-        glScalef(1, 1, 4);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        // Desenho Arma
-        glPushMatrix();
-        glTranslatef(2, 0, 6);
-        glScalef(0.5, 4, 0.5);
-        glutSolidCube(1);
-        glPopMatrix();
-
-        glPopMatrix();
-    }
 
 /* TECLADO*/
 void keyPress(unsigned char key, int x, int y){
@@ -199,6 +162,7 @@ void display(){
 
 
 
+    g->jogador->draw();
 
     gBarril.draw();
 

@@ -19,4 +19,6 @@ GLuint LoadTextureRAW( const char * filename );
 
 void drawSimpleAxis();
 
+void DesenhaJogadorDeTeste();
+
 #endif

@@ -5,7 +5,7 @@
 struct Config {
     int arenaAltura;
     int arenaLargura;
-    int jogadorRaioCabeca;
+    float jogadorRaioCabeca;
     int jogadorVelocidade;
     int inimigoRaioCabeca;
     int inimigoTirosPorSegundo;

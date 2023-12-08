@@ -1,5 +1,5 @@
-#include <cstdio>
 #include "Jogador.h"
+#include "volumes.h"
 
 void Jogador::mover(matrix4f arena, float dt) {
     if (movX == 0 && movY == 0) {
@@ -34,4 +34,16 @@ Vector3f Jogador::getPosicaoAbsolutaDaMira() const {
 
 Vector3f Jogador::getPosicaoAbsolutaCOM() const {
     return posicao + Vector3f(0.0f, 0.0f, 4.0f);
+}
+
+void Jogador::draw() const {
+    float s = (float) config->jogadorRaioCabeca;
+
+    glPushMatrix();
+    {
+        glTranslatef(posicao.x, posicao.y, posicao.z);
+        glScalef(s, s, s);
+        DesenhaJogadorDeTeste();
+    }
+    glPopMatrix();
 }
