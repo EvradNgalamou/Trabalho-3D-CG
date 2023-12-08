@@ -12,6 +12,7 @@
 
 #include "Config.h"
 #include "Game.h"
+#include "Camera.h"
 
 // Key status
 int keyStatus[256];
@@ -25,19 +26,11 @@ GLfloat arenaComp = 10*stdSize; //................ Define o comprimento da arena
 GLfloat arenaLarg = 4*stdSize; //................ Define a largura da arena 
 
 //Camera controls
-double camDist=50;
-double camXYAngle=0;
-double camXZAngle=0;
-int toggleCam = 0;
-int camAngle = 60;
-int lastX = 0;
-int lastY = 0;
-int buttonDown=0;
-
 Config c;
 
 mesh gBarril;
 
+Camera camera;
 Game *g;
 void DesenhaJogador()
     {
@@ -85,8 +78,15 @@ void keyPress(unsigned char key, int x, int y){
 
 */
     switch (key){
-        case '1': keyStatus[(int)('1')] = 1; break;
-        case '2': keyStatus[(int)('2')] = 1; break;
+        case '1':
+            camera.tipoCamera = 1;
+            break;
+        case '2':
+            camera.tipoCamera = 2;
+            break;
+        case '3':
+            camera.tipoCamera = 3;
+            break;
         case 27 :
              exit(0);
     }
@@ -107,43 +107,17 @@ void ResetKeyStatus(){
 
 /* MOUSE */
 void mouse_callback(int button, int state, int x, int y){
-
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        lastX = x;
-        lastY = y;
-        buttonDown = 1;
-    } 
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-        buttonDown = 0;
-    }
+    camera.onMouseDown(button, state, x, y);
 }
+
 void mouse_motion(int x, int y){
-
-    if (!buttonDown)
-        return;
-    
-    camXYAngle += x - lastX;
-    camXZAngle += y - lastY;
-    
-    camXYAngle = (int)camXYAngle % 360;
-    camXZAngle = (int)camXZAngle % 360;
-    
-    lastX = x;
-    lastY = y;
+    camera.onMouseMove(x, y);
 }
+
 void passivemove(int x, int y) {}
 
-void changeCamera(int angle, int w, int h){
-
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity ();
-    gluPerspective (angle, (GLfloat)w / (GLfloat)h, 1, 150.0);
-    glMatrixMode (GL_MODELVIEW);
-}
 void reshape (int w, int h) {
-
-    glViewport (0, 0, (GLsizei)w, (GLsizei)h);
-    changeCamera(camAngle, w, h);
+    camera.onReshape(w, h);
 }
 
 
@@ -191,18 +165,7 @@ void display(){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (keyStatus[(int)'1'] == 1){ 
-        glTranslatef(0,0,-camDist);
-        glRotatef(camXZAngle,1,0,0);
-        glRotatef(camXYAngle,0,1,0);
-    }
-    else
-        if (keyStatus[(int)'2'] == 1)
-            gluLookAt( 5,10,5,  0,0,0,  0,0,1);
-        else
-            gluLookAt( 5,10,5,  0,0,0,  0,0,1);
-
-    
+    camera.transform(g->jogador);
 
 
 
@@ -243,7 +206,6 @@ int main(int argc, char *argv[])
     glutPassiveMotionFunc(passivemove);
     glutIdleFunc(idle);
     init();
-    glutSwapBuffers();
     glutMainLoop();
 
     return 0;

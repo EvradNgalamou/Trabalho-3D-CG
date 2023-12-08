@@ -39,6 +39,9 @@ struct Vector3f {
 
     Vector3f operator/(const Vector3f &other) const;
 
+    // unary -
+    Vector3f operator-() const;
+
     float* ptr();
 
     float lengthSqr() const;

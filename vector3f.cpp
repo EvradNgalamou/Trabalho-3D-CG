@@ -100,3 +100,7 @@ Vector3f Vector3f::cross(const Vector3f &other) const {
             x * other.y - y * other.x
     );
 }
+
+Vector3f Vector3f::operator-() const {
+    return Vector3f(-x, -y, -z);
+}
