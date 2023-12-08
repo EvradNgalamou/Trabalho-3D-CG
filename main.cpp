@@ -200,13 +200,13 @@ void display(){
 
 
 
-    drawSimpleAxis();
-   
     gBarril.draw();
 
     /* EIXOS = X-RED Y-GREEN Z-BLUE  */
     DrawAxes(3);
     g->arena->draw();
+
+    drawSimpleAxis();
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer
