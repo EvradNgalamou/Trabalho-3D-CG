@@ -12,7 +12,7 @@ class Camera {
     GLfloat camDist = 15;
 
     // Angulos de rotação da camera
-    GLfloat horizontalAngle = 90; // horizontal
+    GLfloat horizontalAngle = 1.57; // horizontal
     GLfloat verticalAngle = 0; // vertical
 
     int toggleCam = 0;
