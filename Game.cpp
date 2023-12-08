@@ -76,7 +76,20 @@ void Game::idle() {
         if (Utilidades::chance(1.0f, barril->tempoDesdeUltimoTiro)) {
             Vector3f posicao = barril->getArmaPosicao();
             Vector3f direcao = jogador->getPosicaoAbsolutaCOM() - posicao;
-            direcao.normalize();
+
+            // restringe o angulo de tiro. +90 depende do modelo
+            float limite = 15;
+            float angle = atan2(direcao.y, direcao.x) * 180.0f / M_PI;
+            if (angle < -90 - limite) {
+                angle = -90 - limite;
+            } else if (angle > -90 + limite) {
+                angle = -90 + limite;
+            }
+
+            angle *= M_PI / 180.0f;
+
+            direcao = Vector3f(cosf(angle), sinf(angle), 0.0f);
+
             Bala* bala = new Bala(
                     posicao,
                     direcao * config->inimigoVelocidadeTiro,

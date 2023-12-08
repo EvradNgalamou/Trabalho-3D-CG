@@ -36,12 +36,19 @@ void Barril::draw(Jogador* jogador) const {
             float angulo = atan2(
                     jogador->posicao.y - posicao.y,
                     jogador->posicao.x - posicao.x
-            );
+            ) * 180 / M_PI;
+
+            // limite de -60 a 60 graus
+            if (angulo < -90 - 60.0f) {
+                angulo = -90 - 60.0f;
+            } else if (angulo > -90 + 60.0f) {
+                angulo = -90 + 60.0f;
+            }
 
             glTranslatef(posicao.x, posicao.y, posicao.z);
             glTranslatef(0.0f, 0.0f, config->barrilLargura / 2.0f);
             glScalef(config->inimigoRaioCabeca, config->inimigoRaioCabeca, config->inimigoRaioCabeca);
-            glRotatef(angulo * 180 / M_PI, 0, 0, 1);
+            glRotatef(angulo, 0, 0, 1);
             // ajuste que depende do modelo. O teste olha para o y
             glRotatef(90 + 180, 0, 0, 1);
             glColor3f(1, 0, 0);
