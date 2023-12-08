@@ -1,9 +1,12 @@
 #ifndef TRABALHO_3D_CG_GAME_H
 #define TRABALHO_3D_CG_GAME_H
 
+#include <vector>
+
 #include "Jogador.h"
 #include "Arena.h"
 #include "Camera.h"
+#include "Barril.h"
 
 /*
 class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentro de uma classe
@@ -200,6 +203,8 @@ class Game {
     int tipoCamera = 1;
     float tempoDesdeUltimoIdle;
     Camera camera;
+
+    std::vector<Barril*> barris;
 
 public:
     Jogador* jogador;

@@ -47,6 +47,9 @@
 
 class Utilidades {
 
+public:
+    static bool chance(float chance, float dt);
+    static float randomf();
 };
 
 

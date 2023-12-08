@@ -77,11 +77,13 @@ void init()
     glEnable(GL_DEPTH_TEST);
     glShadeModel (GL_SMOOTH);
     glDepthFunc(GL_LEQUAL);
+    glEnable(GL_DEPTH_CLAMP);
 
     ResetKeyStatus();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(50, 1, 1, 15);
+    gluPerspective(50, 1, 0.5, 2000);
+    glMatrixMode(GL_MODELVIEW);
 
     gBarril.loadMesh("models/arena.obj");
     gBarril.loadTexture("models/textures.bmp");
@@ -107,7 +109,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     // Create the window.
-    glutInitWindowSize(c.arenaLargura, c.arenaAltura);
+    glutInitWindowSize(1000, 1000);
     glutInitWindowPosition(1, 1);
     glutCreateWindow("Quebrador de Barrils");
     glutDisplayFunc(display);

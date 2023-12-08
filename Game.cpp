@@ -1,4 +1,11 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include <cstdlib>
+#include <cstdio>
+
 #include "Game.h"
+#include "Utilidades.h"
 
 Game::Game(Config* config) {
     this->config = config;
@@ -13,10 +20,27 @@ void Game::idle() {
     float t = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
     float dt = t - tempoDesdeUltimoIdle;
 
+    for (std::vector<Barril*>::iterator it = barris.begin(); it != barris.end(); ++it) {
+        (*it)->Descer(dt);
+    }
+
+    // 120%/segundo de adicionar um barril
+    if (jogador->jogando() && Utilidades::chance(1.20f, dt)) {
+        float x = Utilidades::randomf() * config->arenaLargura - config->arenaLargura / 2;
+        Barril* barril = new Barril(
+                config,
+                Vector3f(x, config->arenaAltura / 2, config->barrilLargura / 2),
+                Vector3f(0.0f, -config->barrilVelocidade, 0.0f),
+                dt * rand() < 0.1f // 10% de chance de ter inimigo
+        );
+
+        barris.push_back(barril);
+    }
+
     jogador->mover(arena->getEixoDeCaida(), dt);
 
     glutPostRedisplay();
-    tempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+    tempoDesdeUltimoIdle = t;
 }
 
 void Game::display() const {
@@ -36,15 +60,16 @@ void Game::display() const {
 
     // TODO: Desenhar coisas afetadas por luz
 
+    jogador->draw();
+    arena->draw();
+
+    for (std::vector<Barril*>::const_iterator it = barris.begin(); it != barris.end(); ++it) {
+        (*it)->draw();
+    }
+
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
     glDisable(GL_TEXTURE_2D);
-
-    jogador->draw();
-
-    /* EIXOS = X-RED Y-GREEN Z-BLUE  */
-    DrawAxes(3);
-    arena->draw();
 
     drawSimpleAxis();
 

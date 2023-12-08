@@ -40,6 +40,8 @@ public:
     Vector3f getPosicaoAbsolutaCOM() const;
 
     void draw() const;
+
+    bool jogando() const;
 };
 
 #endif //JOGADOR_H

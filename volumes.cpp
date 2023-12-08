@@ -55,12 +55,11 @@ void drawSimpleAxis() {
     // garante que os eixos sempre serao desenhados por cima de tudo
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    float s = 8;
+    float s = 50;
 
-    glScaled(s, s, s);
-    drawSimpleAxisLine(1, 0, 0);
-    drawSimpleAxisLine(0, 1, 0);
-    drawSimpleAxisLine(0, 0, 1);
+    drawSimpleAxisLine(s, 0, 0);
+    drawSimpleAxisLine(0, s, 0);
+    drawSimpleAxisLine(0, 0, s);
 }
 
 void DrawSolideCube (double size){

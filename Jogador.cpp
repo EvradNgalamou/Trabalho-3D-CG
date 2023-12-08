@@ -47,3 +47,7 @@ void Jogador::draw() const {
     }
     glPopMatrix();
 }
+
+bool Jogador::jogando() const {
+    return !morreu && !ganhou;
+}
