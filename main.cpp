@@ -124,8 +124,6 @@ void reshape (int w, int h) {
 void init()
 {
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);
     glShadeModel (GL_SMOOTH);
     glDepthFunc(GL_LEQUAL);
 
@@ -138,7 +136,6 @@ void init()
     gBarril.loadTexture("models/textures.bmp");
 
     textureGround = LoadTextureRAW( "models/textures.bmp" );
-    glEnable(GL_LIGHT0);
 
     g = new Game();
 }
@@ -168,6 +165,15 @@ void display(){
     camera.transform(g->jogador);
 
 
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    // TODO: Desenhar coisas afetadas por luz
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+    glDisable(GL_TEXTURE_2D);
 
 
 
