@@ -5,7 +5,11 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+#include <math.h>
+
 # include "imageloader.h"
+
+GLfloat BarrilAngle;
 
 void DrawAxes(double size);// FROM opengl3D.cpp laboratorio 4
 
@@ -16,4 +20,10 @@ void DrawSolideSphere (double radius , GLint slices , GLint stacks);
 void DisplayPlane (GLuint texture, GLfloat Dx, GLfloat Dy, GLfloat Dz);
 
 GLuint LoadTextureRAW( const char * filename );
+
+void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B);
+
+void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B);
+
 #endif
+ // +++ DesenhaRoda DesenhaCirc

@@ -139,3 +139,24 @@ GLuint LoadTextureRAW( const char * filename ){
 
     return texture;
 }
+
+
+void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B){
+    GLfloat pi = 3.1416;
+    int circle_points = 18;
+    glPointSize(3.0);
+    glBegin(GL_POINTS);
+    glColor3f(R,G,B);
+    for (int i = 0; i < circle_points; i++) {
+        float angle = 2*pi*i/circle_points;
+        glVertex2f(radius*cos(angle), radius*sin(angle));}
+    glEnd();
+}
+
+void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B){
+   glPushMatrix();
+   glTranslatef(x,y,0.0);
+   glRotatef(thetaWheel, 0.0, 0.0, 1.0);
+   DesenhaCirc(BarrilAngle,R,G,B);
+   glPopMatrix();
+}
