@@ -9,8 +9,6 @@
 
 class Arena {
 public:
-    float inclinacao; // em radianos
-
     /* Identificadores de textura */
     GLuint textureGround;//.................. Piso do cenario
 
