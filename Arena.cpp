@@ -1,6 +1,7 @@
 #include "Arena.h"
 
 Arena::Arena(Config* config) {
+    this->config = config;
     textureGround = LoadTextureRAW("models/textures.bmp");
 }
 
@@ -9,5 +10,5 @@ matrix4f Arena::getEixoDeCaida() const {
 }
 
 void Arena::draw() const {
-    DisplayPlane(textureGround, arenaLarg, arenaComp, 0);
+    DisplayPlane(textureGround, config->arenaAltura, config->arenaLargura, 0);
 }

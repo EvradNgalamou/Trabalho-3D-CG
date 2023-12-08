@@ -8,14 +8,13 @@
 #include "volumes.h"
 
 class Arena {
+    Config* config;
+
 public:
     /* Identificadores de textura */
     GLuint textureGround;//.................. Piso do cenario
 
     /* Define parametro padrao para os objetos */
-    GLfloat stdSize = 1.0;
-    GLfloat arenaComp = 10 * stdSize; //................ Define o comprimento da arena
-    GLfloat arenaLarg = 4 * stdSize; //................ Define a largura da arena
 
     Arena(Config* config);
 
