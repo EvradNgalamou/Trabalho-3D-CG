@@ -48,6 +48,48 @@ void Game::idle() {
         barris.push_back(barril);
     }
 
+    for (std::vector<Bala*>::iterator it = balas.begin(); it != balas.end();) {
+        Bala* bala = *it;
+        bala->Mover(dt);
+
+        Vector3f p = bala->posicao;
+
+        // remover balas que sairam da arena
+        if (p.x < -config->arenaLargura / 2.0f ||
+            p.x > config->arenaLargura / 2.0f ||
+            p.y < -config->arenaAltura / 2.0f ||
+            p.y > config->arenaAltura / 2.0f) {
+            delete bala;
+            it = balas.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    for (std::vector<Barril*>::iterator it = barris.begin(); it != barris.end(); ++it) {
+        Barril* barril = *it;
+
+        if (!barril->temInimigo) {
+            continue;
+        }
+
+        if (Utilidades::chance(1.0f, barril->tempoDesdeUltimoTiro)) {
+            Vector3f posicao = barril->getArmaPosicao();
+            Vector3f direcao = jogador->getPosicaoAbsolutaCOM() - posicao;
+            direcao.normalize();
+            Bala* bala = new Bala(
+                    posicao,
+                    direcao * config->inimigoVelocidadeTiro,
+                    false
+            );
+
+            balas.push_back(bala);
+            barril->tempoDesdeUltimoTiro = 0.0f;
+        } else {
+            barril->tempoDesdeUltimoTiro += dt;
+        }
+    }
+
     jogador->mover(arena->getEixoDeCaida(), dt);
 
     glutPostRedisplay();
@@ -73,6 +115,10 @@ void Game::display() const {
 
     jogador->draw();
     arena->draw();
+
+    for (std::vector<Bala*>::const_iterator it = balas.begin(); it != balas.end(); ++it) {
+        (*it)->draw();
+    }
 
     for (std::vector<Barril*>::const_iterator it = barris.begin(); it != barris.end(); ++it) {
         (*it)->draw(jogador);

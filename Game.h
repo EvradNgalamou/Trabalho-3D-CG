@@ -7,6 +7,7 @@
 #include "Arena.h"
 #include "Camera.h"
 #include "Barril.h"
+#include "Bala.h"
 
 /*
 class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentro de uma classe
@@ -29,19 +30,6 @@ class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentr
 
         Mover Jogador
 
-        // Adicionar Barril
-        if jogando && dt * random() < 10% // 10%/segundo de adicionar um barril
-            add barril
-                x = random
-                y = topo y da arena
-                z = topo z da arena
-                velocidade = velocidade das configurações * direção para baixo da arena // lembrando que a arena é inclinada
-
-        // Bala Sair da Arena
-        foreach bala
-            if bala saiu da arena
-                remove bala
-
         // Bala Acertar Jogador
         for each bala
             if bala veio do jogador
@@ -57,14 +45,6 @@ class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentr
 
         // Bala Acertar Inimigo ou barril
         for each barril
-            // Barril Com Inimigo Sair da Arena
-            // Barril Sair Da Arena
-            //    Destroir o Barril
-            if barril tem inimigo e ambos o barril e inimigo sairam da arena
-                remove barril
-            else if barril não tem inimigo e saiu da arena
-                remove barril
-
             for each bala
                 if bala veio de um inimigo
                     continue // bala de inimigo não acerta inimigo
@@ -205,6 +185,7 @@ class Game {
     Camera camera;
 
     std::vector<Barril*> barris;
+    std::vector<Bala*> balas;
 
 public:
     Jogador* jogador;
