@@ -38,7 +38,9 @@ Barril::Barril(Config* config, Vector3f posicao, Vector3f velocidade, bool temIn
     this->velocidade = velocidade;
     this->temInimigo = temInimigo;
     this->angulo = 0.0f;
-    this->raioColisao = config->barrilLargura;
+    float a = config->barrilAltura / 2.0f;
+    float b = config->barrilLargura / 2.0f;
+    this->raioColisao = sqrtf(a * a + b * b);
     this->miraInimigo = Vector3f(0.0f, 0.0f, 0.0f);
 
     this->velocidadeAngular = (config->barrilVelocidade / (config->barrilLargura / 2)) * 180 / M_PI;

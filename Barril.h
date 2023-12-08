@@ -28,11 +28,11 @@ class Barril {
     Vector3f velocidade;
     float angulo;
     float velocidadeAngular;
-    float raioColisao;
     Vector3f miraInimigo;
     Config* config;
 
 public:
+    float raioColisao;
     Vector3f posicao;
 
     Barril(Config* config, Vector3f posicao, Vector3f velocidade, bool temInimigo);

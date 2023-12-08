@@ -24,6 +24,17 @@ void Game::idle() {
         (*it)->Descer(dt);
     }
 
+    // remover barris que sairam da arena
+    for (std::vector<Barril*>::iterator it = barris.begin(); it != barris.end();) {
+        Barril* barril = *it;
+        if (barril->posicao.y + barril->raioColisao < -config->arenaAltura / 2.0f) {
+            delete barril;
+            it = barris.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
     // 120%/segundo de adicionar um barril
     if (jogador->jogando() && Utilidades::chance(1.20f, dt)) {
         float x = Utilidades::randomf() * config->arenaLargura - config->arenaLargura / 2;
