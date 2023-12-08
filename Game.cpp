@@ -92,6 +92,20 @@ void Game::idle() {
 
     jogador->mover(arena->getEixoDeCaida(), dt);
 
+    // considerando que só o centro do jogador deve estar dentro do mundo
+    Vector3f p = jogador->posicao;
+    if (p.x > config->arenaLargura / 2.0f) {
+        jogador->posicao.x = config->arenaLargura / 2.0f;
+    } else if (p.x < -config->arenaLargura / 2.0f) {
+        jogador->posicao.x = -config->arenaLargura / 2.0f;
+    }
+
+    if (p.y > config->arenaAltura / 2.0f) {
+        jogador->posicao.y = config->arenaAltura / 2.0f;
+    } else if (p.y < -config->arenaAltura / 2.0f) {
+        jogador->posicao.y = -config->arenaAltura / 2.0f;
+    }
+
     glutPostRedisplay();
     tempoDesdeUltimoIdle = t;
 }
