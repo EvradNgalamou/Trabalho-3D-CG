@@ -43,6 +43,26 @@ void DrawAxes(double size){
     glPopMatrix();    
 }
 
+void drawSimpleAxisLine(float x, float y, float z) {
+    glColor3f(x, y, z);
+    glBegin(GL_LINES);
+    glVertex3d(0, 0, 0);
+    glVertex3f(x, y, z);
+    glEnd();
+}
+
+void drawSimpleAxis() {
+    // garante que os eixos sempre serao desenhados por cima de tudo
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    float s = 8;
+
+    glScaled(s, s, s);
+    drawSimpleAxisLine(1, 0, 0);
+    drawSimpleAxisLine(0, 1, 0);
+    drawSimpleAxisLine(0, 0, 1);
+}
+
 void DrawSolideCube (double size){
 
    GLfloat materialEmission[] = { 0.00, 0.00, 0.00, 1.0};

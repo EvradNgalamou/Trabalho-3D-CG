@@ -172,7 +172,7 @@ void display(){
 
 
 
-    
+    drawSimpleAxis();
    
     gBarril.draw();
 

@@ -16,4 +16,7 @@ void DrawSolideSphere (double radius , GLint slices , GLint stacks);
 void DisplayPlane (GLuint texture, GLfloat Dx, GLfloat Dy, GLfloat Dz);
 
 GLuint LoadTextureRAW( const char * filename );
+
+void drawSimpleAxis();
+
 #endif
