@@ -4,6 +4,8 @@ Game::Game(Config* config) {
     this->config = config;
     arena = new Arena(config);
     jogador = new Jogador(config);
+
+    jogador->posicao.y = arena->arenaComp / 4.0f;
 }
 
 void Game::idle() {

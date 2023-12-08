@@ -13,7 +13,6 @@
 class Jogador {
     Config* config;
 
-    Vector3f posicao;
     float raioColisao;
     bool morreu;
     bool ganhou;
@@ -22,6 +21,8 @@ class Jogador {
 public:
     int movX;
     int movY;
+
+    Vector3f posicao;
 
     Jogador(Config* config);
 
