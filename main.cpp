@@ -64,11 +64,8 @@ void DesenhaJogador()
 
 /* TECLADO*/
 void keyPress(unsigned char key, int x, int y){
-/*
     keyStatus[(int)(key)] = 1;
-    glutPostRedisplay();
 
-*/
     switch (key){
         case '1':
             camera.tipoCamera = 1;
@@ -79,14 +76,48 @@ void keyPress(unsigned char key, int x, int y){
         case '3':
             camera.tipoCamera = 3;
             break;
+
+        // movimento do jogador
+        case 'a':
+            g->jogador->movX -= 1;
+            break;
+        case 'd':
+            g->jogador->movX += 1;
+            break;
+        case 'w':
+            g->jogador->movY += 1;
+            break;
+        case 's':
+            g->jogador->movY -= 1;
+            break;
+
         case 27 :
              exit(0);
     }
+
     glutPostRedisplay();
 }
+
 void keyUp(unsigned char key, int x, int y){
 
     keyStatus[(int)(key)] = 0;
+
+    switch (key) {
+        // movimento do jogador
+        case 'a':
+            g->jogador->movX += 1;
+            break;
+        case 'd':
+            g->jogador->movX -= 1;
+            break;
+        case 'w':
+            g->jogador->movY -= 1;
+            break;
+        case 's':
+            g->jogador->movY += 1;
+            break;
+    }
+
     glutPostRedisplay();
 }
 void ResetKeyStatus(){
@@ -134,13 +165,14 @@ float gTempoDesdeUltimoIdle = 0;
 
 void idle(void)
 {
-
     // tempo desde o ultimo idle em segundos
     float t = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-    float dt = 0.001f * (glutGet(GLUT_ELAPSED_TIME) - gTempoDesdeUltimoIdle);
-    glutPostRedisplay();
+    float dt = t - gTempoDesdeUltimoIdle;
 
-    gTempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME);
+    g->jogador->mover(g->arena->getEixoDeCaida(), dt);
+
+    glutPostRedisplay();
+    gTempoDesdeUltimoIdle = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
 }
 
 void display(){

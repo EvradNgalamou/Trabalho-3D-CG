@@ -1,31 +1,11 @@
 #ifndef JOGADOR_H
 #define JOGADOR_H
 
+#include "matrix4f.h"
 #include "vector3f.h"
+#include "Config.h"
 
 /*
-    campos
-        posição
-        // velocidade
-        raio de colisão
-        morreu? // bool
-        ganhou?
-        pontuação
-
-        // direção do movimento em relação às teclas. Note que z não tem pois não tem um movimento para cima como pular.
-        // Essa direção depois será convertida para um vetor 3D que considera a inclinação da arena. Só pensar assim:
-        // (0,0) é parado, (-1,0) é indo para esquerda, (0,1) cima, (1,1) diagonal, etc.
-        movimento: x e y // tem que ser int
-
-    funções/métodos:
-    mover jogador(dt)
-        if movimento é (0,0)
-            return
-
-        direção da velocidade = (base da arena, matrix 3x3) * (movimento [x, y, 0], vetor)
-        velocidade = (velocidade configurada no XML, scalar) * direção da velocidade normalizada
-        posição += velocidade * dt
-
     posição da arma
         return posição do jogador + posição da arma relativa ao jogador
 
@@ -60,31 +40,32 @@
  * */
 
 class Jogador {
+    Config* config;
+
     Vector3f posicao;
     float raioColisao;
     bool morreu;
     bool ganhou;
     int pontuacao;
+
+public:
     int movX;
     int movY;
 
-public:
-    void mover(float dt);
+    Jogador(Config* config);
 
-    // TODO: Atualizar com o modelo do jogador
+    /**
+     * A matriz da arena é uma matriz base (conceito de algebra linear, não confundir com base da arena). Existe uma
+     * matriz de eixos na classe da arena.
+     */
+    void mover(matrix4f arena, float dt);
 
-    Vector3f getPosicaoAbsolutaDosOlhos() const {
-        return getPosicaoAbsolutaCOM() + Vector3f(0.0f, 0.0f, 3.0f);
-    }
+    Vector3f getPosicaoAbsolutaDosOlhos() const;
 
-    Vector3f getPosicaoAbsolutaDaMira() const {
-        return getPosicaoAbsolutaCOM() + Vector3f(0.0f, 1.0f, 2.0f);
-    }
+    Vector3f getPosicaoAbsolutaDaMira() const;
 
     // COM = center of mass, centro de gravidade
-    Vector3f getPosicaoAbsolutaCOM() const {
-        return posicao + Vector3f(0.0f, 0.0f, 4.0f);
-    }
+    Vector3f getPosicaoAbsolutaCOM() const;
 };
 
 #endif //JOGADOR_H
