@@ -301,6 +301,8 @@ void display(){
 
 
 //*******************************************************************************************************
+// NÃO MEXER AQUI DENTRO. ISSO VAI VIRAR UMA FUNCAO ----->>>>>>
+
    //  Enable textures
     glEnable(GL_TEXTURE_2D);
     glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
@@ -356,7 +358,13 @@ void display(){
 
 
     glDisable(GL_TEXTURE_2D);
+
+
+//                                          ^<<<<<<---- NÃO MEXER AQUI DENTRO. ISSO VAI VIRAR UMA FUNCAO 
 //*******************************************************************************************************
+
+
+
     DisplayPlane (textureGround, arenaLarg, arenaComp, 0);
 
 
