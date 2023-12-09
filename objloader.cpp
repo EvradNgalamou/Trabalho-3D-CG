@@ -108,7 +108,7 @@ bool mesh::loadMesh(string path)
     FILE *file = fopen(path.data(), "r");
     if (file == NULL)
     {
-        cout << "falha ao carregar o arquivo" << endl;
+        cout << "falha ao carregar o arquivo " << path << endl;
         return false;
     }
     else
