@@ -9,8 +9,6 @@
 
 # include "imageloader.h"
 
-GLfloat BarrilAngle;
-
 void DrawAxes(double size);// FROM opengl3D.cpp laboratorio 4
 
 void DrawSolideCube (double size);
