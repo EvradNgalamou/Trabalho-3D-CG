@@ -1,10 +1,12 @@
 all: Compile Execute Clear_File
 
-trabalhocg: *.cpp
-	g++ -o trabalhocg *.cpp -lGL -lGLU -lglut
+SOURCES = $(wildcard *.cpp)
 
-trabalhocg_debug: *.cpp
-	g++ -o trabalhocg *.cpp -lGL -lGLU -lglut -g
+trabalhocg: $(SOURCES)
+	g++ -o trabalhocg $(SOURCES) -lGL -lGLU -lglut
+
+trabalhocg_debug: $(SOURCES)
+	g++ -o trabalhocg $(SOURCES) -lGL -lGLU -lglut -g
 
 Compile: trabalhocg
 	clear
