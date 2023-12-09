@@ -70,22 +70,6 @@ class jogo/game // seria tipo variáveis globais, mas fica mais organizado dentr
             max/min x/y/z
             jogador: px/py/pz, r = raio
 
-        // vou considerar que só o centro do jogador deve estar dentro do mundo
-        if px < min x
-            px = min x
-        else if px < max x
-            px = max x
-
-        if py < min y
-            py = min y
-        else if py < max y
-            py = max y
-
-        if pz < min z
-            pz = min z
-        else if pz < max z
-            pz = max z
-
         // Verificar se Jogador Ganhou
         if pontuação > mínimo para ganhar
             ganhou = true
@@ -183,6 +167,8 @@ class Game {
     int tipoCamera = 1;
     float tempoDesdeUltimoIdle;
     Camera camera;
+
+    float jogadorScale = 1.0f;
 
     std::vector<Barril*> barris;
     std::vector<Bala*> balas;

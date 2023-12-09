@@ -20,6 +20,8 @@ Jogador::Jogador(Config* config) {
 
     movX = 0;
     movY = 0;
+
+    raioColisao = config->jogadorRaioCabeca;
 }
 
 // TODO: Atualizar com o modelo do jogador
@@ -36,8 +38,8 @@ Vector3f Jogador::getPosicaoAbsolutaCOM() const {
     return posicao + Vector3f(0.0f, 0.0f, 4.0f);
 }
 
-void Jogador::draw() const {
-    float s = (float) config->jogadorRaioCabeca;
+void Jogador::draw(float scale) const {
+    float s = config->jogadorRaioCabeca * scale;
 
     glPushMatrix();
     {
@@ -50,4 +52,8 @@ void Jogador::draw() const {
 
 bool Jogador::jogando() const {
     return !morreu && !ganhou;
+}
+
+void Jogador::morrer() {
+    morreu = true;
 }

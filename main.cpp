@@ -80,10 +80,6 @@ void init()
     glEnable(GL_DEPTH_CLAMP);
 
     ResetKeyStatus();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(50, 1, 0.5, 2000);
-    glMatrixMode(GL_MODELVIEW);
 
     gBarril.loadMesh("models/arena.obj");
     gBarril.loadTexture("models/textures.bmp");

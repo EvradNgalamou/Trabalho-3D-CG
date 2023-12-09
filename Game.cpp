@@ -6,6 +6,7 @@
 
 #include "Game.h"
 #include "Utilidades.h"
+#include "Text.h"
 
 Game::Game(Config* config) {
     this->config = config;
@@ -103,7 +104,24 @@ void Game::idle() {
         }
     }
 
-    jogador->mover(arena->getEixoDeCaida(), dt);
+    if (jogador->jogando()) {
+        // colisão jogador x barril
+        for (std::vector<Barril*>::iterator it = barris.begin(); it != barris.end(); ++it) {
+            Barril* barril = *it;
+
+            if (Utilidades::colisaoEsfera(
+                    jogador->posicao,
+                    jogador->raioColisao,
+                    barril->posicao,
+                    barril->raioColisao
+            )) {
+                printf("Jogador morreu!\n");
+                jogador->morrer();
+            }
+        }
+
+        jogador->mover(arena->getEixoDeCaida(), dt);
+    }
 
     // considerando que só o centro do jogador deve estar dentro do mundo
     Vector3f p = jogador->posicao;
@@ -124,6 +142,11 @@ void Game::idle() {
 }
 
 void Game::display() const {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(50, 1, 0.5, 2000);
+    glMatrixMode(GL_MODELVIEW);
+
     /* Limpar todos os pixels  */
     glClearColor(0.0f, 0.5f, 0.8f, 1.0f); // AZUL, no opacity(alpha).
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -140,7 +163,9 @@ void Game::display() const {
 
     // TODO: Desenhar coisas afetadas por luz
 
-    jogador->draw();
+    if (!jogador->morreu)
+        jogador->draw(jogadorScale);
+
     arena->draw();
 
     for (std::vector<Bala*>::const_iterator it = balas.begin(); it != balas.end(); ++it) {
@@ -153,9 +178,28 @@ void Game::display() const {
 
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
-    glDisable(GL_TEXTURE_2D);
 
     drawSimpleAxis();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, 1000, 0, 1000);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glTranslatef(500, 500, 0);
+    glScalef(100, 100, 1);
+    glTranslatef(-4.5f, -0.5f, 0);
+
+    if (jogador->morreu) {
+        Text::drawText("GAME OVER");
+    } else if (jogador->ganhou) {
+        Text::drawText("GANHOU");
+    }
+
+    glDisable(GL_TEXTURE_2D);
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer

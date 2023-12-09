@@ -1,10 +1,9 @@
 #ifndef TRABALHO_3D_CG_UTILIDADES_H
 #define TRABALHO_3D_CG_UTILIDADES_H
 
-/*
-    colisão entre esferas
-        return |P2 - P1| < R1 + R2
+#include "vector3f.h"
 
+/*
     se esfera está dentro da arena
         arena:
             min/max x/y/z // uma caixa
@@ -24,9 +23,6 @@
         foreach digit
             load texture for digit
             darw rectangle of digit
-
-    multiplicação vetorial(a, b)
-        ...
 
     criar base de matriz 4x4 para cima(direção): float[16]
         // cria uma matrix com uma base na bala. Algebra linear
@@ -49,7 +45,12 @@ class Utilidades {
 
 public:
     static bool chance(float chance, float dt);
+
     static float randomf();
+
+    static bool colisaoEsfera(Vector3f p1, float r1, Vector3f p2, float r2) {
+        return (p2 - p1).lengthSqr() < (r1 + r2) * (r1 + r2);
+    }
 };
 
 

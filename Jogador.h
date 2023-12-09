@@ -13,12 +13,12 @@
 class Jogador {
     Config* config;
 
+public:
     float raioColisao;
     bool morreu;
     bool ganhou;
     int pontuacao;
 
-public:
     int movX;
     int movY;
 
@@ -39,9 +39,11 @@ public:
     // COM = center of mass, centro de gravidade
     Vector3f getPosicaoAbsolutaCOM() const;
 
-    void draw() const;
+    void draw(float scale) const;
 
     bool jogando() const;
+
+    void morrer();
 };
 
 #endif //JOGADOR_H
