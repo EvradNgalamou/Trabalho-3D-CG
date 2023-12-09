@@ -23,7 +23,7 @@ GLuint LoadTextureRAW( const char * filename );
 
 void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B);
 
-void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B);
+void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat BarrilAngle, GLfloat R, GLfloat G, GLfloat B);
 
 #endif
  // +++ DesenhaRoda DesenhaCirc
