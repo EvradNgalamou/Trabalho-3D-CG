@@ -1,0 +1,43 @@
+ORIGEM: https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/gluCylinder.xml
+
+
+void gluCylinder(	GLUquadric* quad,
+ 	                GLdouble base,
+ 	                GLdouble top,
+ 	                GLdouble height,
+ 	                GLint slices,
+ 	                GLint stacks);
+ 
+Parameters
+quad
+Specifies the quadrics object (created with gluNewQuadric).
+
+base
+Specifies the radius of the cylinder at z = 0.
+
+top
+Specifies the radius of the cylinder at z = height.
+
+height
+Specifies the height of the cylinder.
+
+slices
+Specifies the number of subdivisions around the z axis.
+
+stacks
+Specifies the number of subdivisions along the z axis.
+
+Description
+gluCylinder draws a cylinder oriented along the z axis. The base of the cylinder is placed at z = 0 and the top at 
+z = height. Like a sphere, a cylinder is subdivided around the z axis into slices and along the z axis into stacks.
+
+Note that if top is set to 0.0, this routine generates a cone.
+
+If the orientation is set to GLU_OUTSIDE (with gluQuadricOrientation),
+then any generated normals point away from the z axis.
+Otherwise, they point toward the z axis.
+
+If texturing is turned on (with gluQuadricTexture),
+then texture coordinates are generated so that t ranges
+linearly from 0.0 at z = 0 to 1.0 at z = height, and s ranges from 0.0 at the +y axis, to 0.25 at the +x axis, to 0.5 at the -y axis, to 0.75 at the \-x axis, and back to 1.0 at the +y axis.
+

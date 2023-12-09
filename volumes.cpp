@@ -145,7 +145,7 @@ void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B){
     GLfloat pi = 3.1416;
     int circle_points = 18;
     glPointSize(3.0);
-    glBegin(GL_POINTS);
+    glBegin(GL_POLYGON);
     glColor3f(R,G,B);
     for (int i = 0; i < circle_points; i++) {
         float angle = 2*pi*i/circle_points;

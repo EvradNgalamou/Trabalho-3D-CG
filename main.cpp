@@ -240,8 +240,9 @@ void reshape (int w, int h) {
 }
 
 
-void init()
-{
+void init(){
+
+    glShadeModel (GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -291,22 +292,73 @@ void display(){
         if (keyStatus[(int)'2'] == 1)
             gluLookAt( 5,10,5,  0,0,0,  0,0,1);
         else
-            gluLookAt( 5,10,5,  0,0,0,  0,0,1);
+            gluLookAt( 5,5,5,  0,0,0,  0,0,1);
 
-    
-
-
-
-
-
-
-    
-   
     gBarril.draw();
 
     /* EIXOS = X-RED Y-GREEN Z-BLUE  */
     DrawAxes(3);
+
+
+//*******************************************************************************************************
+   //  Enable textures
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+
+
+
+    glBindTexture(GL_TEXTURE_2D,0); // Stone texture
+
+    GLfloat mat_ambient_r[] = { 1.0, 0.0, 1.0, 0.0 }; // (R,G,B,?)
+    glColor3fv(mat_ambient_r);
+    glMaterialfv(GL_FRONT, GL_EMISSION, mat_ambient_r);
+    GLUquadricObj *quadratic;
+    quadratic = gluNewQuadric();
+
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    GLfloat materialEmission[] = { 0.00, 0.00, 0.00, 1.0};
+    GLfloat materialColor[] = { 1.0, 1.0, 0.0, 1.0};
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
+    GLfloat mat_shininess[] = { 128 };
+    glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, materialColor);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColor);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+
+
+    glPushMatrix();
+
+
+    /* Desenha um cilindro */
+    GLdouble base = 0.3;
+    GLdouble top = 0.3;
+    GLdouble height = 0.7;
+
+    glTranslatef(base,0,0);
+    glRotatef(-90,0,1,0);
+    glTranslatef(base,0,0);
+
+    //Codigo desenhar tampa no topo;
+    //Codigo desenhar tampa na base;
+    DesenhaCirc(10*base/2, 1 , 1 , 1 );
+    gluCylinder(    quadratic, //.......... GLUquadric* quad
+                    base*stdSize, //....... GLdouble base
+                    top*stdSize, //........ GLdouble top
+                    height*stdSize, //..... GLdouble height
+                    10, //................. GLint slices
+                    30 ); //............... GLint stacks
+
+    glPopMatrix();
+
+
+    glDisable(GL_TEXTURE_2D);
+//*******************************************************************************************************
     DisplayPlane (textureGround, arenaLarg, arenaComp, 0);
+
 
     /* Desenhar no frame buffer! */
     glutSwapBuffers(); // Funcao apropriada para janela double buffer
