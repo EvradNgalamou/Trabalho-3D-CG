@@ -153,7 +153,7 @@ void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B){
     glEnd();
 }
 
-void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B){
+void DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat BarrilAngle, GLfloat R, GLfloat G, GLfloat B){
    glPushMatrix();
    glTranslatef(x,y,0.0);
    glRotatef(thetaWheel, 0.0, 0.0, 1.0);
