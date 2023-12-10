@@ -1,11 +1,7 @@
-//
-// Created by gibbs2b on 08/12/23.
-//
-
 #ifndef TRABALHO_3D_CG_CAMERA_H
 #define TRABALHO_3D_CG_CAMERA_H
 
-#include "GL/gl.h"
+#include <GL/gl.h>
 #include "Jogador.h"
 
 class Camera {
@@ -29,6 +25,8 @@ public:
     void onMouseKey(int button, int state, int x, int y);
 
     void onMouseMove(int x, int y);
+
+    void onMousePassive(int x, int y);
 
     void onReshape(int w, int h);
 

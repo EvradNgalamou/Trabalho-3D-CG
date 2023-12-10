@@ -188,6 +188,8 @@ public:
 
     void onMouseMove(int x, int y);
 
+    void onMousePassive(int x, int y);
+
     void onReshape(int w, int h);
 
     void idle();

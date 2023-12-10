@@ -270,3 +270,7 @@ void Game::onMouseMove(int x, int y) {
 void Game::onReshape(int w, int h) {
     camera.onReshape(w, h);
 }
+
+void Game::onMousePassive(int x, int y) {
+    camera.onMousePassive(x, y);
+}

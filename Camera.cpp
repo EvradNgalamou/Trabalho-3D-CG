@@ -8,17 +8,20 @@
 #include <GL/glut.h>
 
 void Camera::onMouseKey(int button, int state, int x, int y) {
-    if (button == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN) {
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
         lastX = x;
         lastY = y;
         buttonDown = 1;
     }
-    if (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP) {
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
         buttonDown = 0;
     }
 }
 
 float radian60 = 60 * M_PI / 180.0;
+
+void Camera::onMousePassive(int x, int y) {
+}
 
 void Camera::onMouseMove(int x, int y) {
     if (!buttonDown)

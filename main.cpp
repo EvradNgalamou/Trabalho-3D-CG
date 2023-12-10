@@ -65,7 +65,9 @@ void mouse_motion(int x, int y){
     g->onMouseMove(x, y);
 }
 
-void passivemove(int x, int y) {}
+void passivemove(int x, int y) {
+    g->onMousePassive(x, y);
+}
 
 void reshape (int w, int h) {
     g->onReshape(w, h);
