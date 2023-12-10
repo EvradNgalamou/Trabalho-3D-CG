@@ -31,7 +31,7 @@ void Camera::onMouseMove(int x, int y) {
     int dy = y - lastY;
 
     // Os valores são sensibilidade do mouse
-    float horizontal = horizontalAngle + 0.007 * dx;
+    float horizontal = horizontalAngle - 0.007 * dx;
     float vertical = verticalAngle + 0.005 * dy;
 
     if (vertical < -radian60) {
