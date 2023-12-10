@@ -39,6 +39,8 @@ public:
     // COM = center of mass, centro de gravidade
     Vector3f getPosicaoAbsolutaCOM() const;
 
+    Vector3f getCentroDeColisao() const;
+
     void draw(float scale) const;
 
     bool jogando() const;

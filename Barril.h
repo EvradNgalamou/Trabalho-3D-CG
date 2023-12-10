@@ -49,6 +49,8 @@ public:
     Vector3f getArmaPosicao() const {
         return posicao + Vector3f(0.0f, 0.0f, config->barrilLargura / 2.0f + config->inimigoRaioCabeca * 8);
     }
+
+    Vector3f getCentroDeColisao() const;
 };
 
 

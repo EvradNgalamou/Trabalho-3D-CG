@@ -8,12 +8,12 @@ struct Config {
     float jogadorRaioCabeca;
     float jogadorVelocidade;
     float inimigoRaioCabeca;
-    float inimigoTirosPorSegundo;
+    int inimigoTirosPorSegundo;
     float inimigoVelocidadeTiro;
     float barrilAltura;
     float barrilLargura;
-    float barrilNumeroTiros;
-    float barrilnParaGanhar;
+    int barrilNumeroTiros;
+    int barrilnParaGanhar;
     float barrilVelocidade;
 
     static void load(Config* config);

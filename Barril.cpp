@@ -59,6 +59,7 @@ void Barril::draw(Jogador* jogador) const {
 }
 
 Barril::Barril(Config* config, Vector3f posicao, Vector3f velocidade, bool temInimigo) {
+    vida = config->barrilNumeroTiros;
     this->config = config;
     this->posicao = posicao;
     this->velocidade = velocidade;
@@ -66,8 +67,17 @@ Barril::Barril(Config* config, Vector3f posicao, Vector3f velocidade, bool temIn
     this->angulo = 0.0f;
     float a = config->barrilAltura / 2.0f;
     float b = config->barrilLargura / 2.0f;
-    this->raioColisao = sqrtf(a * a + b * b);
+    this->raioColisao = sqrtf(a * a + b * b) * 2;
     this->miraInimigo = Vector3f(0.0f, 0.0f, 0.0f);
 
-    this->velocidadeAngular = (config->barrilVelocidade / (config->barrilLargura / 2)) * 180 / M_PI;
+    this->velocidadeAngular = (config->barrilVelocidade / (config->barrilLargura / 2.0f)) * 180.0f / M_PIf;
+}
+
+Vector3f Barril::getCentroDeColisao() const {
+    Vector3f v = posicao + Vector3f(0.0f, 0.0f, config->barrilLargura / 2.0f);
+
+    if (temInimigo)
+        v.z += config->inimigoRaioCabeca * 8;
+
+    return v;
 }

@@ -77,6 +77,8 @@ void Game::idle() {
         if (Utilidades::chance(1.0f, barril->tempoDesdeUltimoTiro)) {
             Vector3f posicao = barril->getArmaPosicao();
             Vector3f direcao = jogador->getPosicaoAbsolutaCOM() - posicao;
+            direcao.normalize();
+            float xy = sqrtf(direcao.x * direcao.x + direcao.y * direcao.y);
 
             // restringe o angulo de tiro. +90 depende do modelo
             float limite = 15;
@@ -89,11 +91,11 @@ void Game::idle() {
 
             angle *= M_PI / 180.0f;
 
-            direcao = Vector3f(cosf(angle), sinf(angle), 0.0f);
+            direcao = Vector3f(xy * cosf(angle), xy * sinf(angle), direcao.z) * config->inimigoVelocidadeTiro;
 
             Bala* bala = new Bala(
                     posicao,
-                    direcao * config->inimigoVelocidadeTiro,
+                    direcao,
                     false
             );
 
@@ -110,13 +112,59 @@ void Game::idle() {
             Barril* barril = *it;
 
             if (Utilidades::colisaoEsfera(
-                    jogador->posicao,
+                    jogador->getCentroDeColisao(),
                     jogador->raioColisao,
                     barril->posicao,
                     barril->raioColisao
             )) {
                 printf("Jogador morreu!\n");
                 jogador->morrer();
+            }
+        }
+
+        // colisão de balas
+        for (std::vector<Bala*>::iterator it = balas.begin(); it != balas.end(); ++it) {
+            Bala* bala = *it;
+
+            if (!bala->veioDoJogador) {
+                if (Utilidades::colisaoEsfera(
+                        jogador->getCentroDeColisao(),
+                        jogador->raioColisao,
+                        bala->posicao,
+                        bala->raioColisao
+                )) {
+                    printf("Jogador morreu!\n");
+                    jogador->morrer();
+                }
+            } else {
+                for (std::vector<Barril*>::iterator it2 = barris.begin(); it2 != barris.end(); ++it2) {
+                    Barril* barril = *it2;
+
+                    if (Utilidades::colisaoEsfera(
+                            barril->getCentroDeColisao(),
+                            barril->raioColisao,
+                            bala->posicao,
+                            bala->raioColisao
+                    )) {
+                        if (barril->temInimigo) {
+                            // leva-se um tiro para matar o inimigo
+                            barril->temInimigo = false;
+                        } else {
+                            barril->tempoDesdeUltimoTiro = 0.0f;
+                            barril->vida--;
+
+                            if (barril->vida <= 0) {
+                                // remover barril
+                                delete barril;
+                                it2 = barris.erase(it2);
+                            }
+                        }
+
+                        delete bala;
+                        it = balas.erase(it);
+                        break;
+                    }
+                }
             }
         }
 

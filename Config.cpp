@@ -24,11 +24,11 @@ void Config::load(Config* config) {
     config->jogadorRaioCabeca = jogador->FloatAttribute("raioCabeca");
     config->jogadorVelocidade = jogador->FloatAttribute("velocidade");
     config->inimigoRaioCabeca = inimigo->FloatAttribute("raioCabeca");
-    config->inimigoTirosPorSegundo = inimigo->FloatAttribute("tirosPorSegungo");
+    config->inimigoTirosPorSegundo = inimigo->IntAttribute("tirosPorSegungo");
     config->inimigoVelocidadeTiro = inimigo->FloatAttribute("velocidadeTiro");
     config->barrilAltura = barril->FloatAttribute("altura");
     config->barrilLargura = barril->FloatAttribute("largura");
-    config->barrilnParaGanhar = barril->FloatAttribute("nParaGanhar");
-    config->barrilNumeroTiros = barril->FloatAttribute("numeroTiros");
+    config->barrilnParaGanhar = barril->IntAttribute("nParaGanhar");
+    config->barrilNumeroTiros = barril->IntAttribute("numeroTiros");
     config->barrilVelocidade = barril->FloatAttribute("velocidade");
 }
