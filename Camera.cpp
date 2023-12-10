@@ -61,11 +61,7 @@ void Camera::transform(Jogador* jogador) const {
     //  em 3D, o eixo z é o eixo vertical, (x, y) é o plano horizontal
 
     // coordenadas esféricas
-    Vector3f direction(
-            cosf(horizontalAngle) * cosf(verticalAngle),
-            sinf(horizontalAngle) * cosf(verticalAngle),
-            sinf(verticalAngle)
-    );
+    Vector3f direction = getDirection();
     Vector3f position;
 
     switch (tipoCamera) {
@@ -87,4 +83,14 @@ void Camera::transform(Jogador* jogador) const {
             center.x, center.y, center.z,
             0, 0, 1
     );
+}
+
+Vector3f Camera::getDirection() const {
+    Vector3f direction(
+            cosf(horizontalAngle) * cosf(verticalAngle),
+            sinf(horizontalAngle) * cosf(verticalAngle),
+            sinf(verticalAngle)
+    );
+
+    return direction;
 }

@@ -32,6 +32,8 @@ public:
 
     // faz as devidas transformações com GL dependendo do tipo de camera atual
     void transform(Jogador* jogador) const;
+
+    Vector3f getDirection() const;
 };
 
 

@@ -261,6 +261,32 @@ bool Game::onKeyUp(unsigned char key, int x, int y) {
 
 void Game::onMouseKey(int button, int state, int x, int y) {
     camera.onMouseKey(button, state, x, y);
+
+    switch (button) {
+        case GLUT_LEFT_BUTTON:
+            if (state != GLUT_DOWN) {
+                break;
+            }
+
+            if (!jogador->jogando()) {
+                break;
+            }
+
+            Vector3f posicao = jogador->getPosicaoAbsolutaDaMira();
+            Vector3f direcao = camera.getDirection();
+            direcao.z = 0.0f;
+
+            direcao.normalize();
+
+            Bala* bala = new Bala(
+                    posicao,
+                    direcao * config->inimigoVelocidadeTiro,
+                    true
+            );
+
+            balas.push_back(bala);
+            break;
+    }
 }
 
 void Game::onMouseMove(int x, int y) {
