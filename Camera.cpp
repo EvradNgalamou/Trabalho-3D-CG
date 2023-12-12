@@ -1,7 +1,3 @@
-//
-// Created by gibbs2b on 08/12/23.
-//
-
 #include "Camera.h"
 
 #include <cmath>
@@ -57,8 +53,7 @@ void Camera::onReshape(int w, int h) {
 }
 
 void Camera::transform(Jogador* jogador) const {
-    // TODO: Tem que decidir a convenção: y ou z que é cima? Eu recomendo z pois quando se plota o gráfico de uma função
-    //  em 3D, o eixo z é o eixo vertical, (x, y) é o plano horizontal
+   
 
     // coordenadas esféricas
     Vector3f direction = getDirection();

@@ -74,7 +74,7 @@ void Game::idle() {
             continue;
         }
 
-        if (Utilidades::chance(1.0f, barril->tempoDesdeUltimoTiro)) {
+        if (Utilidades::chance(0.02f, barril->tempoDesdeUltimoTiro)) {
             Vector3f posicao = barril->getArmaPosicao();
             Vector3f direcao = jogador->getPosicaoAbsolutaCOM() - posicao;
             direcao.normalize();
@@ -179,8 +179,8 @@ void Game::idle() {
         jogador->posicao.x = -config->arenaLargura / 2.0f;
     }
 
-    if (p.y > config->arenaAltura / 2.0f) {
-        jogador->posicao.y = config->arenaAltura / 2.0f;
+    if (p.y > 0 / 2.0f) {
+        jogador->posicao.y = 0 / 2.0f;
     } else if (p.y < -config->arenaAltura / 2.0f) {
         jogador->posicao.y = -config->arenaAltura / 2.0f;
     }
@@ -322,7 +322,7 @@ void Game::onMouseKey(int button, int state, int x, int y) {
 
             Vector3f posicao = jogador->getPosicaoAbsolutaDaMira();
             Vector3f direcao = camera.getDirection();
-            direcao.z = 0.0f;
+            direcao.z = 0.01f;
 
             direcao.normalize();
 

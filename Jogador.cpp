@@ -28,7 +28,7 @@ Jogador::Jogador(Config* config) {
 // TODO: Atualizar com o modelo do jogador
 
 Vector3f Jogador::getPosicaoAbsolutaDosOlhos() const {
-    return getPosicaoAbsolutaCOM() + Vector3f(0.0f, 0.0f, 3.0f * config->jogadorRaioCabeca);
+    return getPosicaoAbsolutaCOM() + Vector3f(0.0f, 0.0f, 5.0f * config->jogadorRaioCabeca);
 }
 
 Vector3f Jogador::getPosicaoAbsolutaDaMira() const {

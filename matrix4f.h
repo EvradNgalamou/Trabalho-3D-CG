@@ -1,6 +1,3 @@
-//
-// Created by gibbs2b on 18/06/23.
-//
 
 #ifndef README_MD_MATRIX4F_H
 #define README_MD_MATRIX4F_H

@@ -188,7 +188,7 @@ void DesenhaJogadorDeTeste()
 
     // Desenho Arma
     glPushMatrix();
-    glTranslatef(2, 1, 6);
+    glTranslatef(1.2, 1, 6);
     glScalef(0.5, 4, 0.5);
     glutSolidCube(1);
     glPopMatrix();

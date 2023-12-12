@@ -1,6 +1,3 @@
-//
-// Created by gibbs2b on 18/06/23.
-//
 
 #include <cmath>
 #include "matrix4f.h"

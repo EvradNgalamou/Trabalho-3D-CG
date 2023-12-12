@@ -1,7 +1,3 @@
-//
-// Created by gibbs2b on 18/06/23.
-//
-
 #ifndef README_MD_VECTOR2F_HPP
 #define README_MD_VECTOR2F_HPP
 

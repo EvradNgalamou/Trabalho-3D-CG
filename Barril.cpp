@@ -44,7 +44,6 @@ void Barril::draw(Jogador* jogador) const {
             } else if (angulo > -90 + 60.0f) {
                 angulo = -90 + 60.0f;
             }
-
             glTranslatef(posicao.x, posicao.y, posicao.z);
             glTranslatef(0.0f, 0.0f, config->barrilLargura / 2.0f);
             glScalef(config->inimigoRaioCabeca, config->inimigoRaioCabeca, config->inimigoRaioCabeca);

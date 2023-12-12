@@ -5,10 +5,6 @@
 #include "vector3f.h"
 #include "Config.h"
 
-/*
-    jogando: bool
-        return ainda não morreu and não morreu
- * */
 
 class Jogador {
     Config* config;

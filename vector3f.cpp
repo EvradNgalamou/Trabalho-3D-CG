@@ -1,7 +1,3 @@
-//
-// Created by gibbs2b on 02/07/23.
-//
-
 #include <cmath>
 #include "vector3f.h"
 
